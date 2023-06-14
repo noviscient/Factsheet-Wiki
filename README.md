@@ -12,6 +12,11 @@ Documentation for the Factsheet Calculations
     2. 3M
     3. 3 Yr
 5. [Risk Return Profile](#section4)
+    1. Annualized Returns
+    2. Annualized Volatility
+6. Return Statistics (#section5)
+7. Risk Statistics (#section6)
+8. Historical Performance
 
 ## Introduction <a id="section1"></a>
 This section is just to lay down the context for all the formulas and code
@@ -172,3 +177,7 @@ In this section, the strategy and its respective benchmarks annualized return an
   File: `plotting.py`  
   Function: `plot_risk_return_profile(self)`
 </details>
+
+## Return Statistics (Annualized) <a id="section5"></a>
+
+## Risk Statistics (Annualized) <a id="section6"></a>
