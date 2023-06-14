@@ -8,7 +8,10 @@ Documentation for the Factsheet Calculations
     3. YTD
     4. CAGR
 3. [Cumulative Monthly Performance](#section3)
-4. [Risk Return Profile](#section4)
+    1. Line Graph
+    2. 3M
+    3. 3 Yr
+5. [Risk Return Profile](#section4)
 
 ## Introduction <a id="section1"></a>
 This section is just to lay down the context for all the formulas and code
@@ -16,6 +19,8 @@ This section is just to lay down the context for all the formulas and code
 2. $R_n$: Represents the **percentage returns** of the strategy for the $nth$ month
 3. `monthly_rets`: pd.Series type which represents all the months and its respective returns for each month
 ## Performance Metrics <a id="section2"></a>
+**Description:**
+The below metrics are used to evaluate and analyze the performance of the strategy over a specific period of time 
 **Diagram:**  
 ![image](https://github.com/gabrielyong4/Analytics-Project/assets/114644478/cfabcee2-7fee-4b29-94bc-5af895aa99a0)  
 **Location within Factsheet**: Page 1, top left hand side
@@ -85,19 +90,19 @@ In this section, the given strategy's monthly performance is compared against ce
 ![image](https://github.com/gabrielyong4/Analytics-Project/assets/114644478/fad571af-0e03-4c87-a718-068e14ae6efb)
 - Table showing the performance metrics(3M, YTD, 1 Yr, 3 Yr, Since January 2017) for the strategy and its benchmarks
 ![image](https://github.com/gabrielyong4/Analytics-Project/assets/114644478/8236cbd1-dcf2-4464-899a-628988d3cc74) 
-**Location within Factsheet**: Page 1, top right side
+**Location within Factsheet**: Page 1, top right side  
+
 <details>
   <summary> Line Graph </summary>
   
   ### Description
   A graph that shows the monthly performance of the fund and its respective benchmarks
-  ### Formula(words)
-  NIL
-  ### Formula(code)
-<!--  is it essential to put code here?  -->
-  ### Location
+  ### Graph Plot Location
   File: `plotting.py`  
-  Function: `plot_cum_rets()`
+  Function: `plot_cum_rets()`  
+  ### Calculation Location  
+  File: `calculation.py`  
+  Function: `cal_key_perf(rets)`
 </details>
 
 <details>
@@ -106,13 +111,27 @@ In this section, the given strategy's monthly performance is compared against ce
   ### Description
   Percentage return for the last 3 months
   ### Formula(words)
-  $\[(1 + R_{N-2})(1 + R_{N-1})(1 + R_{N})\]-1$
+  $\ 3M = [(1 + R_{N-2})(1 + R_{N-1})(1 + R_{N})\]-1$
   ### Formula(code)
   `(monthly_rets.iloc[-3:] + 1).prod() - 1`
-  ### Graph Plot Lcation
-  File: `plotting.py`
-  Function: `plot_cum_rets()`
   ### Calculation Location  
   File: `calculation.py`  
   Function: `cal_key_perf(rets)`
 </details>
+
+<details>
+  <summary> 3 Yr </summary>
+  
+  ### Description
+  Percentage return from the past 36 months  
+  ### Formula(words)
+  $\ 1 \space Yr = [(1 + R_{N})(1 + R_{N-1})...(1 + R_{N-35})\]-1$ 
+  ### Formula(code)
+  `(monthly_rets.iloc[-36:] + 1).prod() - 1`
+  ### Location  
+  File: `calculation.py`  
+  Function: `cal_key_perf(rets)`
+</details>
+
+**Note:** 1 Yr and YTD are already defined in the Performance Metrics section
+
