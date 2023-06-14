@@ -14,8 +14,8 @@ Documentation for the Factsheet Calculations
 5. [Risk Return Profile](#section4)
     1. Annualized Returns
     2. Annualized Volatility
-6. Return Statistics (#section5)
-7. Risk Statistics (#section6)
+6. [Return Statistics (Annualized)] (#section5)
+7. [Risk Statistics (Annualized)] (#section6)
 8. Historical Performance
 
 ## Introduction <a id="section1"></a>
