@@ -135,3 +135,40 @@ In this section, the given strategy's monthly performance is compared against ce
 
 **Note:** 1 Yr and YTD are already defined in the Performance Metrics section
 
+## Risk Return Profile <a id="section4"></a>
+**Description**:  
+In this section, the strategy and its respective benchmarks annualized return and annualized volatility will be reflected on graph
+![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/f287af28-c961-4896-a6a4-b4302b9c8d42)  
+**Location within Factsheet**: Page 1, top left hand side
+
+<details>
+  <summary> Annualized Return </summary>
+  
+  ### Description
+  A measure of how much an investment has increased on average each year, during a specific time period. The y-axis of the graph
+  ### Formula(words)
+  $\ Annualized \space Return = \bar{R} * 252 $  
+  $\bar{R}$: Represents the mean of the daily returns
+  ### Formula(code)
+  `rr_mu = rets_for_rr.mean() * YEARLY_LENGTH`  
+  `YEARLY_LENGTH`: Number of trading days per year, 252  
+  `rets_for_rr`: pandas.DataFrame of the daily returns of the strategy and its respective benchmarks
+  ### Location  
+  File: `plotting.py`  
+  Function: `plot_risk_return_profile(self)`
+</details>
+
+<details>
+  <summary> Annualized Volatility </summary>
+  
+  ### Description
+  A measure of the dispersion of returns of a financial instrument over a given period, expressed in terms of an annualized standard deviation. The y-axis of the graph
+  ### Formula(words)
+  $\ Annualized \space Volatility = \sigma * \sqrt{252} $  
+  $\sigma$: Standard deviation of the daily returns
+  ### Formula(code)
+  `rr_std = rets_for_rr.std() * np.sqrt(YEARLY_LENGTH)`  
+  ### Location  
+  File: `plotting.py`  
+  Function: `plot_risk_return_profile(self)`
+</details>
