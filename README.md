@@ -259,11 +259,11 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   ### Description
   Measure of downside risk that focuses on returns that fall below a minimum acceptable return (MAR). The MAR used will      depend on the strategy/product. 
   ### Formula(words) 
-  $$\ Annualised \space Downside \space Volatility = \sqrt{\frac{\sum\limits_{t=1}^{n} [min(R_s - R_{f}, 0)]^2}{n-1}} -      \sqrt{No. \space of \space Trading \space Days \space per \space year}$$
+  $$\ Annualised \space Downside \space Volatility = \sqrt{\frac{\sum\limits_{t=1}^{n} [min(R_{st} - R_{ft}, 0)]^2}{n-1}} -      \sqrt{No. \space of \space Trading \space Days \space per \space year}$$
   $n$: Total Number of Returns  
   $min(X,Y)$: Minimum out of the 2 parameters. For the numerator we only want the negative excess returns  
-  $R_s$: Strategy/Product Returns  
-  $R_f$: Risk-free Benchmark Returns  
+  $R_{st}$: Strategy/Product Returns at time t
+  $R_{ft}$: Risk-free Benchmark Returns at time t
   $No. \space of \space Trading \space Days \space per \space year$: 252
   ### Formula(code)
   `risk_stats["Downside Volatility"] = ((excess_rets[excess_rets < 0]**2).sum() /len(excess_rets))**0.5 * scale**0.5`  
@@ -276,15 +276,34 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   <summary> Maximum Drawdown </summary>
   
   ### Description
-  Average of the strategy's negative returns (returns < 0)
+  A measure of an asset's largest price drop from peak to a trough
   ### Formula(words)
-  $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
-  $R_w$: Represents the negative returns for month $w$
+  1. Compute the cumulative returns series:
+     $$\ C_t = \prod\limits_{i=0}^{t} (1 + R_i) $$
+     where $t$ represents the index of the returns series.
+  2. Calculate the drawdown series:
+     $$\ D_t = \frac{C_t}{{\max\limits_{i=0}^{t}(C_i)}} - 1 $$
+     where $D_t$ represents the drawdown at time $t$ and $\max\limits_{i=0}^{t}(C_i)$ is the maximum cumulative returns         observed up to time $t$
+  3. Find the absolute maximum drawdown:
+     $$\ \text{Max Drawdown} = \left| \min_{t}(D_t) \right| $$
+     where $\\text{Max Drawdown}$ represents the absolute value of the lowest drawdown observed. 
   ### Formula(code)
-  `rets_stats['Average Losing Month'] = self.stgy_mrets[self.stgy_mrets < 0].mean()`  
+  ```python
+  def cal_underwater(rets):
+    cum_rets = (rets + 1).cumprod()
+    underwater = cum_rets / np.maximum.accumulate(cum_rets) - 1
+    return underwater
+  ...
+  class Calculation:
+      ...
+      def cal_risk_stats(self):
+          ...
+          risk_stats['Maximum Drawdown'] = abs(cal_underwater(stgy_rets).min())
+          ...
+  ```
   ### Location  
-  File: `calculation.py`  
-  Function: `cal_return_stats(self)`
+  File: `calculation.py`
+  Function: `cal_underwater(rets), cal_risk_stats(self)`
 </details>
 
 <details>
