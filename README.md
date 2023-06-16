@@ -302,20 +302,32 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
           ...
   ```
   ### Location  
-  File: `calculation.py`
+  File: `calculation.py`  
   Function: `cal_underwater(rets), cal_risk_stats(self)`
 </details>
 
 <details>
-  <summary> Value at Risk </summary>
+  <summary> Value at Risk (Value at Risk) </summary>
   
   ### Description
-  Average of the strategy's negative returns (returns < 0)
+  Measures the extent of possible financial losses within the strategy/product over a specific time frame
   ### Formula(words)
-  $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
+  $\ \text{Value at Risk} = \frac{R_1 + R_2 + ... + R_W}{W} $   
   $R_w$: Represents the negative returns for month $w$
   ### Formula(code)
-  `rets_stats['Average Losing Month'] = self.stgy_mrets[self.stgy_mrets < 0].mean()`  
+  ```python
+  def cal_var(rets, alpha=0.05):
+    rets = rets[~np.isnan(rets)]
+    var = np.quantile(rets, alpha)
+    return var
+  ...
+  class Calculation:
+      ...
+      def cal_risk_stats(self):
+          ...
+          risk_stats['Value at Risk'] = -cal_var(self.stgy_mrets)
+          ...
+  ``` 
   ### Location  
   File: `calculation.py`  
   Function: `cal_return_stats(self)`
@@ -330,7 +342,19 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
   $R_w$: Represents the negative returns for month $w$
   ### Formula(code)
-  `rets_stats['Average Losing Month'] = self.stgy_mrets[self.stgy_mrets < 0].mean()`  
+  ```python
+  def cal_var(rets, alpha=0.05):
+    rets = rets[~np.isnan(rets)]
+    var = np.quantile(rets, alpha)
+    return var
+  ...
+  class Calculation:
+      ...
+      def cal_risk_stats(self):
+          ...
+          risk_stats['Value at Risk'] = -cal_var(self.stgy_mrets)
+          ...
+  ```
   ### Location  
   File: `calculation.py`  
   Function: `cal_return_stats(self)`
