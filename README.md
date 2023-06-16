@@ -202,12 +202,13 @@ In this section, the metrics are used to evaluate the returns from the chosen st
   <summary> Winning Month </summary>
   
   ### Description
-  Average of the percentage returns for months where the trading strategy generated positive returns (returns > 0)
+  Proportion of positive returns (returns > 0) in the strategy
   ### Formula(words)
-  $\ Winning \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $  
-  w: Each w represents a month where the trading strategy generated positive returns
+  $\ Winning \space Month = \frac{x}{N}$  
+  $x$: Total number of positive returns in the strategy
   ### Formula(code)
   `rets_stats['Winning Month'] = (self.stgy_mrets > 0).mean()`  
+  `self.stgy_mrets`: Panda.Series of the monthly percentage returns for the strategy
   ### Location  
   File: `calculation.py`  
   Function: `cal_return_stats(self)`
@@ -217,31 +218,178 @@ In this section, the metrics are used to evaluate the returns from the chosen st
   <summary> Average Winning Month </summary>
   
   ### Description
-  
+  Average of the strategy's positive returns (returns > 0)
   ### Formula(words)
-  $\  $  
+  $\ Average \space Winning \space Month = \frac{R_1 + R_2 + ... + R_W}{W}  $  
+  $R_w$: Represents the positive returns for month $w$
   ### Formula(code)
-  `rr_mu = rets_for_rr.mean() * YEARLY_LENGTH`  
+  `rets_stats['Average Winning Month'] = self.stgy_mrets[self.stgy_mrets > 0].mean()`  
   ### Location  
-  File: `plotting.py`  
-  Function: `plot_risk_return_profile(self)`
+  File: `calculation.py`  
+  Function: `cal_return_stats(self)`
 </details>
 
 <details>
   <summary> Average Losing Month </summary>
   
   ### Description
-  
+  Average of the strategy's negative returns (returns < 0)
   ### Formula(words)
-  $\  $  
+  $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
+  $R_w$: Represents the negative returns for month $w$
   ### Formula(code)
-  `rr_mu = rets_for_rr.mean() * YEARLY_LENGTH`  
+  `rets_stats['Average Losing Month'] = self.stgy_mrets[self.stgy_mrets < 0].mean()`  
   ### Location  
-  File: `plotting.py`  
-  Function: `plot_risk_return_profile(self)`
+  File: `calculation.py`  
+  Function: `cal_return_stats(self)`
 </details>
 
 **Note:** CAGR, 1 Year ROR (1 Yr), Year To Date ROR (YTD), Total Return(Since Inception) are already defined in the Performance Metrics section. 3 Month ROR (3M) and the 3 year ROR (3 Yr) are already defined in the Cumulative Monthly Performance section.
 
 
 ## Risk Statistics (Annualized) <a id="section6"></a>
+**Description**:  
+In this section, the metrics are used to evaluate the risks from the chosen strategy
+![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/5e3adf8a-d5e3-412f-99b5-31d4f18537de)  
+**Location:**  Page 1, Next to the Return Statistics section
+
+<details>
+  <summary> Downside Volatility </summary>
+  
+  ### Description
+  Measure of downside risk that focuses on returns that fall below a minimum acceptable return (MAR). The MAR used will      depend on the strategy/product. 
+  ### Formula(words) 
+  $$\ Annualised \space Downside \space Volatility = \sqrt{\frac{\sum\limits_{t=1}^{n} [min(R_s - R_{f}, 0)]^2}{n-1}} -      \sqrt{No. \space of \space Trading \space Days \space per \space year}$$
+  $n$: Total Number of Returns  
+  $min(X,Y)$: Minimum out of the 2 parameters. For the numerator we only want the negative excess returns  
+  $R_s$: Strategy/Product Returns  
+  $R_f$: Risk-free Benchmark Returns  
+  $No. \space of \space Trading \space Days \space per \space year$: 252
+  ### Formula(code)
+  `risk_stats["Downside Volatility"] = ((excess_rets[excess_rets < 0]**2).sum() /len(excess_rets))**0.5 * scale**0.5`  
+  ### Location  
+  File: `calculation.py`  
+  Function: `cal_risk_stats(self)`
+</details>
+
+<details>
+  <summary> Maximum Drawdown </summary>
+  
+  ### Description
+  Average of the strategy's negative returns (returns < 0)
+  ### Formula(words)
+  $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
+  $R_w$: Represents the negative returns for month $w$
+  ### Formula(code)
+  `rets_stats['Average Losing Month'] = self.stgy_mrets[self.stgy_mrets < 0].mean()`  
+  ### Location  
+  File: `calculation.py`  
+  Function: `cal_return_stats(self)`
+</details>
+
+<details>
+  <summary> Value at Risk </summary>
+  
+  ### Description
+  Average of the strategy's negative returns (returns < 0)
+  ### Formula(words)
+  $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
+  $R_w$: Represents the negative returns for month $w$
+  ### Formula(code)
+  `rets_stats['Average Losing Month'] = self.stgy_mrets[self.stgy_mrets < 0].mean()`  
+  ### Location  
+  File: `calculation.py`  
+  Function: `cal_return_stats(self)`
+</details>
+
+<details>
+  <summary> Expected Shortfall </summary>
+  
+  ### Description
+  Average of the strategy's negative returns (returns < 0)
+  ### Formula(words)
+  $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
+  $R_w$: Represents the negative returns for month $w$
+  ### Formula(code)
+  `rets_stats['Average Losing Month'] = self.stgy_mrets[self.stgy_mrets < 0].mean()`  
+  ### Location  
+  File: `calculation.py`  
+  Function: `cal_return_stats(self)`
+</details>
+
+<details>
+  <summary> Beta (Market Index) </summary>
+  
+  ### Description
+  Average of the strategy's negative returns (returns < 0)
+  ### Formula(words)
+  $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
+  $R_w$: Represents the negative returns for month $w$
+  ### Formula(code)
+  `rets_stats['Average Losing Month'] = self.stgy_mrets[self.stgy_mrets < 0].mean()`  
+  ### Location  
+  File: `calculation.py`  
+  Function: `cal_return_stats(self)`
+</details>
+
+<details>
+  <summary> Correlation (Market Index) </summary>
+  
+  ### Description
+  Average of the strategy's negative returns (returns < 0)
+  ### Formula(words)
+  $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
+  $R_w$: Represents the negative returns for month $w$
+  ### Formula(code)
+  `rets_stats['Average Losing Month'] = self.stgy_mrets[self.stgy_mrets < 0].mean()`  
+  ### Location  
+  File: `calculation.py`  
+  Function: `cal_return_stats(self)`
+</details>
+
+<details>
+  <summary> Tail Correlation (Market Index) </summary>
+  
+  ### Description
+  Average of the strategy's negative returns (returns < 0)
+  ### Formula(words)
+  $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
+  $R_w$: Represents the negative returns for month $w$
+  ### Formula(code)
+  `rets_stats['Average Losing Month'] = self.stgy_mrets[self.stgy_mrets < 0].mean()`  
+  ### Location  
+  File: `calculation.py`  
+  Function: `cal_return_stats(self)`
+</details>
+
+<details>
+  <summary> Sharpe Ratio </summary>
+  
+  ### Description
+  Average of the strategy's negative returns (returns < 0)
+  ### Formula(words)
+  $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
+  $R_w$: Represents the negative returns for month $w$
+  ### Formula(code)
+  `rets_stats['Average Losing Month'] = self.stgy_mrets[self.stgy_mrets < 0].mean()`  
+  ### Location  
+  File: `calculation.py`  
+  Function: `cal_return_stats(self)`
+</details>
+
+<details>
+  <summary> Calmar Ratio </summary>
+  
+  ### Description
+  Average of the strategy's negative returns (returns < 0)
+  ### Formula(words)
+  $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
+  $R_w$: Represents the negative returns for month $w$
+  ### Formula(code)
+  `rets_stats['Average Losing Month'] = self.stgy_mrets[self.stgy_mrets < 0].mean()`  
+  ### Location  
+  File: `calculation.py`  
+  Function: `cal_return_stats(self)`
+</details>
+
+**Note:** Volatility is the same as Annualized Volatility in the Risk Return Profile section
