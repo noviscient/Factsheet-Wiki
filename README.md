@@ -94,7 +94,8 @@ In this section, the given strategy's monthly performance is compared against ce
 - Line graph of the monthly performance of the strategy and its benchmarks
 ![image](https://github.com/gabrielyong4/Analytics-Project/assets/114644478/fad571af-0e03-4c87-a718-068e14ae6efb)
 - Table showing the performance metrics(3M, YTD, 1 Yr, 3 Yr, Since January 2017) for the strategy and its benchmarks
-![image](https://github.com/gabrielyong4/Analytics-Project/assets/114644478/8236cbd1-dcf2-4464-899a-628988d3cc74) 
+![image](https://github.com/gabrielyong4/Analytics-Project/assets/114644478/8236cbd1-dcf2-4464-899a-628988d3cc74)
+
 **Location within Factsheet**: Page 1, top right side  
 
 <details>
@@ -249,21 +250,21 @@ In this section, the metrics are used to evaluate the returns from the chosen st
 
 ## Risk Statistics (Annualized) <a id="section6"></a>
 **Description**:  
-In this section, the metrics are used to evaluate the risks from the chosen strategy
+In this section, the metrics are used to evaluate the risks from the chosen strategy  
 ![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/5e3adf8a-d5e3-412f-99b5-31d4f18537de)  
-**Location:**  Page 1, Next to the Return Statistics section
+**Location within Factsheet:**  Page 1, Next to the Return Statistics section
 
 <details>
   <summary> Downside Volatility </summary>
   
   ### Description
-  Measure of downside risk that focuses on returns that fall below a minimum acceptable return (MAR). The MAR used will      depend on the strategy/product. 
+  Measure of downside risk that focuses on returns that fall below the risk-free benchmark. The risk-free benchmark will depend on the geography where the strategy is        denominated and the market traded. For US and Global strategies we will be using the 13 week Treasury Bill rate. 
   ### Formula(words) 
-  $$\ Annualised \space Downside \space Volatility = \sqrt{\frac{\sum\limits_{t=1}^{n} [min(R_{st} - R_{ft}, 0)]^2}{n-1}} -      \sqrt{No. \space of \space Trading \space Days \space per \space year}$$
+  $$\ Annualised \space Downside \space Volatility = \sqrt{\frac{\sum\limits_{t=1}^{n} [min(R_{st} - R_{ft}, 0)]^2}{n}} - \sqrt{No. \space of \space Trading \space Days \space per \space year}$$
   $n$: Total Number of Returns  
   $min(X,Y)$: Minimum out of the 2 parameters. For the numerator we only want the negative excess returns  
-  $R_{st}$: Strategy/Product Returns at time t
-  $R_{ft}$: Risk-free Benchmark Returns at time t
+  $R_{st}$: Strategy/Product Returns at time t  
+  $R_{ft}$: Risk-free Benchmark Returns at time t  
   $No. \space of \space Trading \space Days \space per \space year$: 252
   ### Formula(code)
   `risk_stats["Downside Volatility"] = ((excess_rets[excess_rets < 0]**2).sum() /len(excess_rets))**0.5 * scale**0.5`  
@@ -283,7 +284,7 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
      where $t$ represents the index of the returns series.
   2. Calculate the drawdown series:
      $$\ D_t = \frac{C_t}{{\max\limits_{i=0}^{t}(C_i)}} - 1 $$
-     where $D_t$ represents the drawdown at time $t$ and $\max\limits_{i=0}^{t}(C_i)$ is the maximum cumulative returns         observed up to time $t$
+     where $D_t$ represents the drawdown at time $t$ and $\max\limits_{i=0}^{t}(C_i)$ is the maximum cumulative returns observed up to time $t$
   3. Find the absolute maximum drawdown:
      $$\ \text{Max Drawdown} = \left| \min_{t}(D_t) \right| $$
      where $\\text{Max Drawdown}$ represents the absolute value of the lowest drawdown observed. 
