@@ -281,7 +281,7 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   ### Formula(words)
   1. Compute the cumulative returns series:
      $$\ C_t = \prod\limits_{i=0}^{t} (1 + R_i) $$
-     where $t$ represents the index of the returns series.
+     where $t$ represents the date of the returns series.
   2. Calculate the drawdown series:
      $$\ D_t = \frac{C_t}{{\max\limits_{i=0}^{t}(C_i)}} - 1 $$
      where $D_t$ represents the drawdown at time $t$ and $\max\limits_{i=0}^{t}(C_i)$ is the maximum cumulative returns observed up to time $t$
@@ -311,10 +311,12 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   <summary> Value at Risk (Value at Risk) </summary>
   
   ### Description
-  Measures the extent of possible financial losses within the strategy/product over a specific time frame
+  Measures the extent of possible financial losses within the strategy/product over a specific time frame given a certain significance level (alpha)
   ### Formula(words)
-  $\ \text{Value at Risk} = \frac{R_1 + R_2 + ... + R_W}{W} $   
-  $R_w$: Represents the negative returns for month $w$
+  $\ \text{Value at Risk} = Q(\alpha, \text{rets}) $  
+  $\ \alpha$: Represents the significance level  
+  $rets$: Represents all the returns in the strategy  
+  $Q$: Finds the quantile based on the significance level and the returns in the strategy
   ### Formula(code)
   ```python
   def cal_var(rets, alpha=0.05):
@@ -331,46 +333,64 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   ``` 
   ### Location  
   File: `calculation.py`  
-  Function: `cal_return_stats(self)`
+  Function: `cal_risk_stats(self)`, `cal_var(rets, alpha=0.05)`
 </details>
 
 <details>
   <summary> Expected Shortfall </summary>
   
   ### Description
-  Average of the strategy's negative returns (returns < 0)
+  Measures the weighted average of the "extreme" losses in the tail of the distribution of possible returns, beyond the VaR cutoff point and given a certain significance level (alpha)
   ### Formula(words)
-  $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
-  $R_w$: Represents the negative returns for month $w$
+  There will be 2 cases to find the expected shortfall:
+  1. When $\ \alpha >= 0.5$,
+  $$\ \text{ES} = \frac{1}{N_\geq} \sum\limits_{i=1}^{N_\geq} x_i $$  
+  $N_\geq$: Represents the number of returns greater than or equal to the $\ \alpha$ quantile  
+  $x_i$: Represents each return in the set  
+  2. When $\ \alpha < 0.5$,
+  $$\ \text{ES} = \frac{1}{N_<} \sum\limits_{i=1}^{N<} x_i $$  
+  $N_<$: Represents the number of returns lesser than the $\ \alpha$ quantile  
+  $x_i$: Represents each return in the set
   ### Formula(code)
   ```python
-  def cal_var(rets, alpha=0.05):
+  def cal_empirical_es(rets, alpha=0.05):
     rets = rets[~np.isnan(rets)]
-    var = np.quantile(rets, alpha)
-    return var
+    if alpha >= 0.5:
+        es = rets[rets >= np.quantile(rets, alpha)].mean()
+    else:
+        es = rets[rets <= np.quantile(rets, alpha)].mean()
+    return es
   ...
   class Calculation:
       ...
       def cal_risk_stats(self):
           ...
-          risk_stats['Value at Risk'] = -cal_var(self.stgy_mrets)
+          risk_stats['Expected Shortfall'] = -cal_empirical_es(self.stgy_mrets)
           ...
-  ```
+  ``` 
   ### Location  
   File: `calculation.py`  
-  Function: `cal_return_stats(self)`
+  Function: `cal_risk_stats(self)`, `cal_empirical_es(rets, alpha=0.05)`
 </details>
 
 <details>
   <summary> Beta (Market Index) </summary>
   
   ### Description
-  Average of the strategy's negative returns (returns < 0)
+  Measures the strategy's volatility in relation to the overall market
   ### Formula(words)
   $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
   $R_w$: Represents the negative returns for month $w$
   ### Formula(code)
-  `rets_stats['Average Losing Month'] = self.stgy_mrets[self.stgy_mrets < 0].mean()`  
+  ```python
+  def cal_risk_stats(self):
+      ...
+      risk_stats['Beta (Market Index)'] = OLS(
+        stgy_rets.values,
+        add_constant(
+            rets_all[self.market_rets.name].values)).fit().params[1]
+      ...
+  ``` 
   ### Location  
   File: `calculation.py`  
   Function: `cal_return_stats(self)`
