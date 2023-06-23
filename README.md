@@ -258,7 +258,7 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   <summary> Downside Volatility </summary>
   
   ### Description
-  Measure of downside risk that focuses on returns that fall below the risk-free benchmark. The risk-free benchmark will depend on the geography where the strategy is        denominated and the market traded. For US and Global strategies we will be using the 13 week Treasury Bill rate. 
+  Measure of downside risk that focuses on returns that fall below the risk-free benchmark. The risk-free benchmark will depend on the geography where the strategy is denominated and the market traded. For US and Global strategies we will be using the 13 week Treasury Bill rate. 
   ### Formula(words) 
   $$\ Annualised \space Downside \space Volatility = \sqrt{\frac{\sum\limits_{t=1}^{n} [min(R_{st} - R_{ft}, 0)]^2}{n}} - \sqrt{No. \space of \space Trading \space Days \space per \space year}$$
   $n$: Total Number of Returns  
@@ -342,12 +342,7 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   ### Description
   Measures the weighted average of the "extreme" losses in the tail of the distribution of possible returns, beyond the VaR cutoff point and given a certain significance level (alpha)
   ### Formula(words)
-  There will be 2 cases to find the expected shortfall:
-  1. When $\ \alpha >= 0.5$,
-  $$\ \text{ES} = \frac{1}{N_\geq} \sum\limits_{i=1}^{N_\geq} x_i $$  
-  $N_\geq$: Represents the number of returns greater than or equal to the $\ \alpha$ quantile  
-  $x_i$: Represents each return in the set  
-  2. When $\ \alpha < 0.5$,
+  Given $\ \alpha < 0.05$,
   $$\ \text{ES} = \frac{1}{N_<} \sum\limits_{i=1}^{N<} x_i $$  
   $N_<$: Represents the number of returns lesser than the $\ \alpha$ quantile  
   $x_i$: Represents each return in the set
@@ -355,9 +350,9 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   ```python
   def cal_empirical_es(rets, alpha=0.05):
     rets = rets[~np.isnan(rets)]
-    if alpha >= 0.5:
+    if alpha >= 0.5: # if the user inputs losses
         es = rets[rets >= np.quantile(rets, alpha)].mean()
-    else:
+    else: # if the user inputs returns
         es = rets[rets <= np.quantile(rets, alpha)].mean()
     return es
   ...
@@ -377,10 +372,13 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   <summary> Beta (Market Index) </summary>
   
   ### Description
-  Measures the strategy's volatility in relation to the overall market
+  Measures the strategy's volatility in relation to the overall market. The market will depend on the geography where the strategy is denominated and the market traded.
   ### Formula(words)
-  $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
-  $R_w$: Represents the negative returns for month $w$
+  $\ R_i = \beta{R_m} + \epsilon $   
+  $R_m$: Represents market returns  
+  $R_i$: Represents strategy returns  
+  $\ \beta $: Our objective  
+  $\ \epsilon $: Error term or residuals, captures the unexplained part of stock returns
   ### Formula(code)
   ```python
   def cal_risk_stats(self):
@@ -390,37 +388,62 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
         add_constant(
             rets_all[self.market_rets.name].values)).fit().params[1]
       ...
-  ``` 
+  ```  
+  Above code finds the Beta, which corresponds to the coefficient of the market returns (`results.params[1]`)
   ### Location  
   File: `calculation.py`  
-  Function: `cal_return_stats(self)`
+  Function: `cal_risk_stats(self)`
 </details>
 
 <details>
   <summary> Correlation (Market Index) </summary>
   
   ### Description
-  Average of the strategy's negative returns (returns < 0)
+  A measure that determines how the strategy will move in relation to the market. The market will depend on the geography where the strategy is denominated and the market traded
   ### Formula(words)
-  $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
-  $R_w$: Represents the negative returns for month $w$
+  $\ correlation = \frac{{\sum ((x - \bar{x})(y - \bar{y}))}}{{\sqrt{{\sum ((x - \bar{x})^2)}} \cdot \sqrt{{\sum ((y - \bar{y})^2)}}}} $   
+  $x$: represents one set of stock returns  
+  $y$: represents the other set of stock returns  
+  $\bar{x}$: represents the mean (average) of the x values.  
+  #\bar{y}$: represents the mean (average) of the y values.  
   ### Formula(code)
-  `rets_stats['Average Losing Month'] = self.stgy_mrets[self.stgy_mrets < 0].mean()`  
+  `risk_stats['Correlation (Market Index)'] = rets_all[[
+            self.stgy_rets.name, self.market_rets.name
+        ]].corr().iloc[0, 1]`  
   ### Location  
   File: `calculation.py`  
-  Function: `cal_return_stats(self)`
+  Function: `cal_risk_stats(self)`
 </details>
 
 <details>
   <summary> Tail Correlation (Market Index) </summary>
   
   ### Description
-  Average of the strategy's negative returns (returns < 0)
+  Refers to the correlation between the exterme events or outliers of 
   ### Formula(words)
   $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
   $R_w$: Represents the negative returns for month $w$
   ### Formula(code)
-  `rets_stats['Average Losing Month'] = self.stgy_mrets[self.stgy_mrets < 0].mean()`  
+  ```python
+def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
+    rets = rets[~np.isnan(rets).any(axis=1)]
+    rets = rets / rets.std(axis=0)
+    rets_1, rets_2 = rets[:, 0], rets[:, 1]
+    rets_p = rets_1 * w + rets_2 * (1 - w)
+    mu = [r.mean() for r in [rets_1, rets_2, rets_p]]
+    rm = [func(r, **args) for r in [rets_1, rets_2, rets_p]]
+    corr = ((rm[2] - mu[2])**2 - w**2 * (rm[0] - mu[0])**2 - (1 - w)**2 * (rm[1] - mu[1])**2) \
+        / (2 * w * (1 - w) * (rm[0] - mu[0]) * (rm[1] - mu[1]))
+    return corr
+  ...
+  class Calculation:
+      ...
+      def cal_risk_stats(self):
+          ...
+          risk_stats['Tail Correlation (Market Index)'] = cal_rm_corr(
+              rets_all[[self.stgy_rets.name, self.market_rets.name]].values)
+          ...
+  ``` 
   ### Location  
   File: `calculation.py`  
   Function: `cal_return_stats(self)`
