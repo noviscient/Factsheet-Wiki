@@ -141,7 +141,7 @@ In this section, the given strategy's monthly performance is compared against ce
   Function: `cal_key_perf(rets)`
 </details>
 
-**Note:** 1 Yr, YTD and Since January 2017(Since Inception) are already defined in the Performance Metrics section
+**Note:** [1 Yr](#section2.1), YTD and Since January 2017(Since Inception) are already defined in the Performance Metrics section
 
 ## Risk Return Profile <a id="section4"></a>
 **Description**:  
