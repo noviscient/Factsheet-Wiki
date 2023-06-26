@@ -4,19 +4,32 @@ Documentation for the Factsheet Calculations
 1. [Introduction](#section1)
 2. [Performance Metrics](#section2)
     1. [1 Yr](#section2.1)
-    2. Since Inception
-    3. YTD
-    4. CAGR
+    2. [Since Inception](#section2.2)
+    3. [YTD](#section2.3)
+    4. [CAGR](#section2.4)
 3. [Cumulative Monthly Performance](#section3)
-    1. Line Graph
-    2. 3M
-    3. 3 Yr
+    1. [Line Graph](#section3.1)
+    2. [3M](#section3.2)
+    3. [3 Yr](#section3.3)
 5. [Risk Return Profile](#section4)
-    1. Annualized Returns
-    2. Annualized Volatility
+    1. [Annualized Returns](#section4.1)
+    2. [Annualized Volatility](#section4.2)
 6. [Return Statistics (Annualized)](#section5)
-7. [Risk Statistics (Annualized)](#section6)
-8. Historical Performance
+    1. [6 Month ROR](#section5.1)
+    2. [Winning Month](#section5.2)
+    3. [Average Winning Month](#section5.3)
+    4. [Average Losing Month](#section5.4)
+8. [Risk Statistics (Annualized)](#section6)
+    1. [Downside Volatility](#section6.1)
+    2. [Maximum Drawdown](#section6.2)
+    3. [Value at Risk](#section6.3)
+    4. [Expected Shortfall](#section6.4)
+    5. [Beta (Market Index)](#section6.5)
+    6. [Correlation (Market Index)](#section6.6)
+    7. [Tail Correlation (Market Index)](#section6.7)
+    8. [Sharpe Ratio](#section6.8)
+    9. [Calmar Ratio](#section6.9)
+10. Historical Performance
 
 ## Introduction <a id="section1"></a>
 This section is just to lay down the context for all the formulas and code
@@ -46,7 +59,9 @@ The below metrics are used to evaluate and analyze the performance of the strate
 </details>
 
 <details>
-  <summary> Since Inception </summary>
+  <summary> 
+      <a id="section2.2"> Since Inception </a>
+  </summary>
   
   ### Description
   Percentage return since the inception date
@@ -61,7 +76,9 @@ The below metrics are used to evaluate and analyze the performance of the strate
 </details>
 
 <details>
-  <summary> YTD </summary>
+  <summary>
+      <a id="section2.3"> YTD </a>
+  </summary>
   
   ### Description
   Percentage return from the start of current year to now
@@ -76,7 +93,9 @@ The below metrics are used to evaluate and analyze the performance of the strate
 </details>
 
 <details>
-  <summary> CAGR </summary>
+  <summary>
+      <a id="section2.4"> CAGR </a>
+  </summary>
   
   ### Description
   Compound Annual Growth Rate
@@ -101,7 +120,9 @@ In this section, the given strategy's monthly performance is compared against ce
 **Location within Factsheet**: Page 1, top right side  
 
 <details>
-  <summary> Line Graph </summary>
+  <summary> 
+      <a id="section3.1"> Line Graph </a>
+  </summary>
   
   ### Description
   A graph that shows the monthly performance of the fund and its respective benchmarks
@@ -114,7 +135,9 @@ In this section, the given strategy's monthly performance is compared against ce
 </details>
 
 <details>
-  <summary> 3M </summary>
+  <summary>
+      <a id="section3.2"> 3M </a>
+  </summary>
   
   ### Description
   Percentage return for the last 3 months
@@ -128,7 +151,9 @@ In this section, the given strategy's monthly performance is compared against ce
 </details>
 
 <details>
-  <summary> 3 Yr </summary>
+  <summary>
+      <a id="section3.3"> 3 Yr </a>
+  </summary>
   
   ### Description
   Percentage return from the past 36 months  
@@ -141,7 +166,7 @@ In this section, the given strategy's monthly performance is compared against ce
   Function: `cal_key_perf(rets)`
 </details>
 
-**Note:** [1 Yr](#section2.1), YTD and Since January 2017(Since Inception) are already defined in the Performance Metrics section
+**Note:** [1 Yr](#section2.1), [YTD](#section2.3) and [Since January 2017(Since Inception)](#section2.2) are already defined in the earlier sections. 
 
 ## Risk Return Profile <a id="section4"></a>
 **Description**:  
@@ -150,7 +175,9 @@ In this section, the strategy and its respective benchmarks annualized return an
 **Location within Factsheet**: Page 1, top left hand side
 
 <details>
-  <summary> Annualized Return </summary>
+  <summary>
+      <a id="section4.1"> Annualized Return </a>
+  </summary>
   
   ### Description
   A measure of how much an investment has increased on average each year, during a specific time period. The y-axis of the graph
@@ -167,7 +194,9 @@ In this section, the strategy and its respective benchmarks annualized return an
 </details>
 
 <details>
-  <summary> Annualized Volatility </summary>
+  <summary>
+      <a id="section4.2"> Annualized Volatility </a>
+  </summary>
   
   ### Description
   A measure of the dispersion of returns of a financial instrument over a given period, expressed in terms of an annualized standard deviation. The y-axis of the graph
@@ -188,7 +217,9 @@ In this section, the metrics are used to evaluate the returns from the chosen st
 **Location:**  Page 1, Below the Cumulative Monthly Performance Table
 
 <details>
-  <summary> 6 Month ROR </summary>
+  <summary>
+      <a id="section5.1"> 6 Month ROR </a>
+  </summary>
   
   ### Description
   Percentage return for the last 6 months
@@ -202,7 +233,9 @@ In this section, the metrics are used to evaluate the returns from the chosen st
 </details>
 
 <details>
-  <summary> Winning Month </summary>
+  <summary>
+      <a id="section5.2"> Winning Month </a>
+  </summary>
   
   ### Description
   Proportion of positive returns (returns > 0) in the strategy
@@ -218,7 +251,9 @@ In this section, the metrics are used to evaluate the returns from the chosen st
 </details>
 
 <details>
-  <summary> Average Winning Month </summary>
+  <summary>
+      <a id="section5.3"> Average Winning Month </a>
+  </summary>
   
   ### Description
   Average of the strategy's positive returns (returns > 0)
@@ -233,7 +268,9 @@ In this section, the metrics are used to evaluate the returns from the chosen st
 </details>
 
 <details>
-  <summary> Average Losing Month </summary>
+  <summary>
+      <a id="section5.4"> Average Losing Month </a>
+  </summary>
   
   ### Description
   Average of the strategy's negative returns (returns < 0)
@@ -247,7 +284,7 @@ In this section, the metrics are used to evaluate the returns from the chosen st
   Function: `cal_return_stats(self)`
 </details>
 
-**Note:** CAGR, 1 Year ROR (1 Yr), Year To Date ROR (YTD), Total Return(Since Inception) are already defined in the Performance Metrics section. 3 Month ROR (3M) and the 3 year ROR (3 Yr) are already defined in the Cumulative Monthly Performance section.
+**Note:** [CAGR](#section2.4), [1 Year ROR](#section2.1), [Year To Date ROR](#section2.3), [Total Return](#section2.2), [3 Month ROR](#section3.2) and the [3 year ROR](#section3.3) are already defined in the above sections
 
 
 ## Risk Statistics (Annualized) <a id="section6"></a>
@@ -257,7 +294,9 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
 **Location within Factsheet:**  Page 1, Next to the Return Statistics section
 
 <details>
-  <summary> Downside Volatility </summary>
+  <summary>
+      <a id="section6.1"> Downside Volatility </a>
+  </summary>
   
   ### Description
   Measure of downside risk that focuses on returns that fall below the risk-free benchmark. The risk-free benchmark will depend on the geography where the strategy is denominated and the market traded. For US and Global strategies we will be using the 13 week Treasury Bill rate. 
@@ -276,7 +315,9 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
 </details>
 
 <details>
-  <summary> Maximum Drawdown </summary>
+  <summary>
+      <a id="section6.2"> Maximum Drawdown </a>
+  </summary>
   
   ### Description
   A measure of an asset's largest price drop from peak to a trough
@@ -310,7 +351,9 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
 </details>
 
 <details>
-  <summary> Value at Risk (Value at Risk) </summary>
+  <summary>
+      <a id="section6.3"> Value at Risk (Value at Risk) </a>
+  </summary>
   
   ### Description
   Measures the extent of possible financial losses within the strategy/product over a specific time frame given a certain significance level (alpha)
@@ -339,7 +382,9 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
 </details>
 
 <details>
-  <summary> Expected Shortfall </summary>
+  <summary>
+      <a id="section6.4"> Expected Shortfall </a>
+  </summary>
   
   ### Description
   Measures the weighted average of the "extreme" losses in the tail of the distribution of possible returns, beyond the VaR cutoff point and given a certain significance level (alpha)
@@ -371,7 +416,9 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
 </details>
 
 <details>
-  <summary> Beta (Market Index) </summary>
+  <summary>
+      <a id="section6.5"> Beta (Market Index) </a>
+  </summary>
   
   ### Description
   Measures the strategy's volatility in relation to the overall market. The market will depend on the geography where the strategy is denominated and the market traded.
@@ -398,7 +445,9 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
 </details>
 
 <details>
-  <summary> Correlation (Market Index) </summary>
+  <summary>
+      <a id="section6.6"> Correlation (Market Index) </a>
+  </summary>
   
   ### Description
   A measure that determines how the strategy will move in relation to the market. The market will depend on the geography where the strategy is denominated and the market traded
@@ -418,7 +467,9 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
 </details>
 
 <details>
-  <summary> Tail Correlation (Market Index) </summary>
+  <summary>
+      <a id="section6.7"> Tail Correlation (Market Index) </a>
+  </summary>
   
   ### Description
   Refers to the correlation between the exterme events or outliers of 
@@ -452,7 +503,9 @@ def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
 </details>
 
 <details>
-  <summary> Sharpe Ratio </summary>
+  <summary>
+      <a id="section6.8"> Sharpe Ratio </a>
+  </summary>
   
   ### Description
   Average of the strategy's negative returns (returns < 0)
@@ -467,7 +520,9 @@ def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
 </details>
 
 <details>
-  <summary> Calmar Ratio </summary>
+  <summary>
+      <a id="section6.9"> Calmar Ratio </a>
+  </summary>
   
   ### Description
   Average of the strategy's negative returns (returns < 0)
