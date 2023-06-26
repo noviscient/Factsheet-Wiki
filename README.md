@@ -284,7 +284,7 @@ In this section, the metrics are used to evaluate the returns from the chosen st
   Function: `cal_return_stats(self)`
 </details>
 
-**Note:** [CAGR](#section2.4), [1 Year ROR](#section2.1), [Year To Date ROR](#section2.3), [Total Return](#section2.2), [3 Month ROR](#section3.2) and the [3 year ROR](#section3.3) are already defined in the above sections
+**Note:** [CAGR](#section2.4), [1 Year ROR (1 Yr)](#section2.1), [Year To Date ROR (YTD)](#section2.3), [Total Return (Since Inception)](#section2.2), [3 Month ROR (3M)](#section3.2) and the [3 year ROR (3 Yr)](#section3.3) are already defined in the above sections 
 
 
 ## Risk Statistics (Annualized) <a id="section6"></a>
