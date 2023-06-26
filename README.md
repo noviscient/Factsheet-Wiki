@@ -3,7 +3,7 @@ Documentation for the Factsheet Calculations
 ##### Table of Contents
 1. [Introduction](#section1)
 2. [Performance Metrics](#section2)
-    1. 1 Yr
+    1. [1 Yr](#section2.1)
     2. Since Inception
     3. YTD
     4. CAGR
@@ -30,7 +30,9 @@ The below metrics are used to evaluate and analyze the performance of the strate
 ![image](https://github.com/gabrielyong4/Analytics-Project/assets/114644478/cfabcee2-7fee-4b29-94bc-5af895aa99a0)  
 **Location within Factsheet**: Page 1, top left hand side
 <details>
-  <summary> 1 Yr </summary>
+  <summary>
+      <a id="section2.1"> 1 Yr </a>
+  </summary>
     
   ### Description
   Percentage return from the past 12 months  
