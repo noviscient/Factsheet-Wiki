@@ -29,7 +29,7 @@ Documentation for the Factsheet Calculations
     7. [Tail Correlation (Market Index)](#section6.7)
     8. [Sharpe Ratio](#section6.8)
     9. [Calmar Ratio](#section6.9)
-10. Historical Performance
+10. [Historical Performance](#section7)
 
 ## Introduction <a id="section1"></a>
 This section is just to lay down the context for all the formulas and code
@@ -489,7 +489,7 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   5. Find the Tail Correlation: 
   $$\ \text{Tail Correlation} = \frac{(ES_{p} - \mu_{p})^2 - w^2(ES_{strat} - \mu_{strat})^2 - (1-w)^2(ES_{mkt} - \mu_{mkt})^2}{2w(1-w)(ES_{strat} - \mu_{strat})(ES_{mkt} - \mu_{mkt})} $$
   ### Formula(code)
-  ```python
+```python
 def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
     rets = rets[~np.isnan(rets).any(axis=1)]
     rets = rets / rets.std(axis=0)
@@ -508,7 +508,7 @@ def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
           risk_stats['Tail Correlation (Market Index)'] = cal_rm_corr(
               rets_all[[self.stgy_rets.name, self.market_rets.name]].values)
           ...
-  ``` 
+``` 
   ### Location  
   File: `calculation.py`  
   Function: `cal_risk_stats(self)`, `def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args)`
@@ -573,4 +573,32 @@ def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
   Function: `cal_risk_stats(self)`
 </details>
 
-**Note:** [Volatility](#section4.2) is in the above section.
+**Note:** [Volatility](#section4.2) is in the above section.  
+
+## Historical Performance (Up to 5 Years) <a id="section7"></a>
+**Description**:  
+The past performance of the strategy  
+![Alt text](image.png)  
+**Location within Factsheet:**  Page 1, Bottom of the page  
+
+### Formula(words)
+Converting the daily returns into monthly returns for each month $m$, $R_m$:
+$$\ R_m = [(D_1 + 1)(D_2 + 1)...(D_i + 1)] - 1 $$
+$D_i$: represents the return on day $i$ in month $m$
+
+### Formula(code)
+Plotting of the graph code
+```python
+def format_table(self, version):
+  ...
+  # Historical Performance
+  rets = self.data.stgy_mrets
+  df = (rets + 1).groupby(
+      [rets.index.year.rename('year'),
+        rets.index.month.rename('month')]).prod() - 1
+  ...
+```
+
+### Location  
+  File: `plotting.py`  
+  Function: `format_table(self)`
