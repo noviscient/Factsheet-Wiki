@@ -472,8 +472,11 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   </summary>
   
   ### Description
-  Refers to the correlation between the exterme events or outliers of 
+  Refers to the correlation between the extreme events or outliers of the strategy and the market. The market will depend on the geography where the strategy is denominated and the market traded
   ### Formula(words)
+  1. Standardise the returns for series $i$ at each time $t$, Z_{i, t} where i is the `strat` or `mkt`: 
+  2. Find the weighted average portfolio returns, $Z_p$:
+  3. Find the mean of all the return series, $\ \mu_i $: 
   $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
   $R_w$: Represents the negative returns for month $w$
   ### Formula(code)
