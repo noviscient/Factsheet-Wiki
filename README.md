@@ -476,7 +476,9 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   ### Formula(words)
   1. Standardise the returns for series $i$ at each time $t$, Z_{i, t} where i is the `strat` or `mkt`: 
   2. Find the weighted average portfolio returns, $Z_p$:
-  3. Find the mean of all the return series, $\ \mu_i $: 
+  3. Find the mean of all the return series, $\ \mu_i $ where i is either `strat`, `mkt`, `portfolio (p)`
+  4. Find the expected shortfall of all the return series, $ES_i$ where i is either `strat`, `mkt`, `portfolio (p)`
+  5. Find the Tail Correlation
   $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
   $R_w$: Represents the negative returns for month $w$
   ### Formula(code)
