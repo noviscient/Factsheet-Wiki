@@ -487,8 +487,7 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   7. Find the expected shortfall of all the return series, $ES_i$ where i is either `strat`, `mkt`, `portfolio (p)`:  
   Use the equation in the [Expected Shortfall](#section6.4) section on each series
   9. Find the Tail Correlation: 
-  $$\ \text{Tail Correlation} = \frac{}{} $$
-  $R_w$: Represents the negative returns for month $w$
+  $$\ \text{Tail Correlation} = \frac{(ES_{p} - \mu_{p})^2 - w^2(ES_{strat} - \mu_{strat})^2 - (1-w)^2(ES_{mkt} - \mu_{mkt})^2}{2w(1-w)(ES_{strat} - \mu_{strat})(ES_{mkt} - \mu_{mkt})} $$
   ### Formula(code)
   ```python
 def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
@@ -512,7 +511,7 @@ def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
   ``` 
   ### Location  
   File: `calculation.py`  
-  Function: `cal_return_stats(self)`
+  Function: `cal_risk_stats(self)`, `def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args)`
 </details>
 
 <details>
