@@ -478,15 +478,15 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   $$\ Z_{i, t} = \frac{R_{i,t}}{\sigma_i} $$  
   $R_{i, t}$: represents the returns of series $i$ at time $t$  
   $\ \sigma_i $: represents the standard deviation of series $i$  
-  3. Find the weighted average portfolio return series at each time $t$, $Z_{p, t}$:  
+  2. Find the weighted average portfolio return series at each time $t$, $Z_{p, t}$:  
   $$\ Z_{p, t} = Z_{strat, t}(w) + Z_{mkt, t}(1-w) $$  
   $w$: represents the weight assigned to the strategy
-  5. Find the mean of all the return series, $\ \mu_i $ where i is either `strat`, `mkt`, `portfolio (p)`:
+  3. Find the mean of all the return series, $\ \mu_i $ where i is either `strat`, `mkt`, `portfolio (p)`:
   $$\ \mu_i = \frac{\sum\limits_{t=1}^{N_i}R_{i,t}}{N_i} $$
   $ N_i $: Total number of returns for series $i$  
-  7. Find the expected shortfall of all the return series, $ES_i$ where i is either `strat`, `mkt`, `portfolio (p)`:  
+  4. Find the expected shortfall of all the return series, $ES_i$ where i is either `strat`, `mkt`, `portfolio (p)`:  
   Use the equation in the [Expected Shortfall](#section6.4) section on each series
-  9. Find the Tail Correlation: 
+  5. Find the Tail Correlation: 
   $$\ \text{Tail Correlation} = \frac{(ES_{p} - \mu_{p})^2 - w^2(ES_{strat} - \mu_{strat})^2 - (1-w)^2(ES_{mkt} - \mu_{mkt})^2}{2w(1-w)(ES_{strat} - \mu_{strat})(ES_{mkt} - \mu_{mkt})} $$
   ### Formula(code)
   ```python
@@ -520,15 +520,25 @@ def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
   </summary>
   
   ### Description
-  
+  Measure of an investment's risk-adjusted performance, calculated by comparing its return to that of a risk-free benchmark. The risk-free benchmark will depend on the geography where the strategy is denominated and the market traded. For US and Global strategies we will be using the 13 week Treasury Bill rate.
+
   ### Formula(words)
-  $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
-  $R_w$: Represents the negative returns for month $w$
+  1. Find the excess returns at each time $t$, $R_{excess, t}$  
+  $$\ R_{excess, t} = R_{strat, t} - R_{f,t} $$  
+  $R_{strat, t}$: represents the strategy returns at time $t$  
+  $R_{f, t}$: represents the risk-free benchmark returns at time $t$  
+  2. Find the Sharpe Ratio:  
+  $$\ \text{Sharpe Ratio} = \frac{E(R_{excess})}{\sigma_{excess returns}} * YEARLY_LENGTH $$  
+  $E(R_{excess})$: represents the mean of the excess returns  
+  $\sigma_{strat}$: represents the standard deviation of the excess returns  
+  $YEARLY_LENGTH$: 272, Total number of trading days per year  
+
   ### Formula(code)
-  `rets_stats['Average Losing Month'] = self.stgy_mrets[self.stgy_mrets < 0].mean()`  
+  `risk_stats['Sharpe Ratio'] = excess_rets.mean() / excess_rets.std() * np.sqrt(scale)`
+
   ### Location  
   File: `calculation.py`  
-  Function: `cal_return_stats(self)`
+  Function: `cal_risk_stats(self)`
 </details>
 
 <details>
