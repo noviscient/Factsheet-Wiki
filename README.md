@@ -520,7 +520,7 @@ def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
   </summary>
   
   ### Description
-  Average of the strategy's negative returns (returns < 0)
+  
   ### Formula(words)
   $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
   $R_w$: Represents the negative returns for month $w$
