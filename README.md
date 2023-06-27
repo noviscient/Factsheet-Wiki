@@ -623,15 +623,14 @@ The metrics will be analysed using the column names as references.
   1. Find the rolling calculation size:
   To do this we find the total number of months present in the period.
   For example, 
-  $$\
-  Window Size (6 Months) = 6 \\
-  Window Size (3 Years) = 3 * 12 = 36
+  $$\ 
+  \text{Window Size} (6 Months) = 6 \\ 
+  \text{Window Size} (3 Years) = 3 * 12 = 36
   $$
 
-  2. Calculate the compounded return for each month $m$, $R_m$
-  $$\
-  R_m = (\prod\limits_{m-window}^{T = m}{R_i + 1}) - 1
-  $$
+  2. Calculate the compounded return for each month $m$, $R_m$:
+  $$\ R_m = (\prod\limits_{m-window}^{T = m}{R_i + 1}) - 1 $$  
+
   where the first month $m$ will be equal to the window size. For example, for the `3 Years` Period, the first return calculated will be the rolling period return for the 36th month, $R_{36}$, which uses the previous 36 months to calculate the $R_{36}$ compounded return. This process will keep repeating until there is less than 36 months of data available to do the calculations. 
 
 
@@ -643,21 +642,7 @@ The metrics will be analysed using the column names as references.
     rets_report['1 Month'] = f((self.stgy_mrets +
                                 1).rolling(1).apply(np.prod, raw=False) -
                                 1)
-    rets_report['3 Months'] = f((self.stgy_mrets +
-                                  1).rolling(3).apply(np.prod, raw=False) -
-                                1)
-    rets_report['6 Months'] = f((self.stgy_mrets +
-                                  1).rolling(6).apply(np.prod, raw=False) -
-                                1)
-    rets_report['1 Year'] = f((self.stgy_mrets +
-                                1).rolling(12).apply(np.prod, raw=False) -
-                              1)
-    rets_report['2 Years'] = f((self.stgy_mrets +
-                                1).rolling(24).apply(np.prod, raw=False) -
-                                1)
-    rets_report['3 Years'] = f((self.stgy_mrets +
-                                1).rolling(36).apply(np.prod, raw=False) -
-                                1)
+    # more Period calculations
     rets_report['5 Years'] = f((self.stgy_mrets +
                                 1).rolling(60).apply(np.prod, raw=False) -
                                 1)
