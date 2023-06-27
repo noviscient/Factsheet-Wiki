@@ -578,14 +578,14 @@ def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
 ## Historical Performance (Up to 5 Years) <a id="section7"></a>
 **Description**:  
 The past performance of the strategy  
-![Alt text](image.png)  
+![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/742c88ed-172f-48ef-b767-771b9817d539)  
 **Location within Factsheet:**  Page 1, Bottom of the page  
 
 ### Formula(words)
 Converting the daily returns into monthly returns for each month $m$, $R_m$:
-$$\ R_m = [(D_1 + 1)(D_2 + 1)...(D_i + 1)] - 1 $$
+$$\ R_m = [(D_1 + 1)(D_2 + 1)...(D_I + 1)] - 1 $$
 $D_i$: represents the return on day $i$ in month $m$
-
+$I$: represents the total number of days in that month $m$
 ### Formula(code)
 Plotting of the graph code
 ```python
