@@ -529,7 +529,7 @@ def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
   $R_{f, t}$: represents the risk-free benchmark returns at time $t$  
 
   2. Find the Sharpe Ratio:  
-  $$\ \text{Sharpe Ratio} = \frac{E(R_{excess})}{\sigma_{excess}} * \text{YEARLY LENGTH} $$  
+  $$\ \text{Sharpe Ratio} = \frac{E(R_{excess})}{\sigma_{excess}} * \sqrt{\text{YEARLY LENGTH}} $$  
   $E(R_{excess})$: represents the mean of the excess returns  
   $\sigma_{strat}$: represents the standard deviation of the excess returns  
   $YEARLY LENGTH$: 272, Total number of trading days per year  
@@ -552,7 +552,7 @@ def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
   Note: Calmar Ratio focuses on worst-case scenario through the maximum drawdown while the Sharpe Ratio considers overall volatility  
 
   ### Formula(words)
-  1. Find the excess returns at each time $t$, $R_{excess, t}$:  
+  1. Find the excess returns at each time $t$, $R_{excess, t}$:
   $$\ R_{excess, t} = R_{strat, t} - R_{f,t} $$  
   $R_{strat, t}$: represents the strategy returns at time $t$  
   $R_{f, t}$: represents the risk-free benchmark returns at time $t$  
@@ -563,6 +563,7 @@ def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
   3. Find the Calmar Ratio:  
   $$\ \text{Calmar Ratio} = \frac{E(R_{excess})}{\text{Maximum Drawdown}} * \text{YEARLY LENGTH} $$  
   $E(R_{excess})$: represents the mean of the excess returns  
+  $YEARLY LENGTH$: 272, Total number of trading days per year  
 
   ### Formula(code)
   `risk_stats['Calmar Ratio'] = excess_rets.mean() / risk_stats['Maximum Drawdown'] * scale`  
@@ -572,4 +573,4 @@ def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
   Function: `cal_risk_stats(self)`
 </details>
 
-**Note:** Volatility is the same as Annualized Volatility in the Risk Return Profile section
+**Note:** [Volatility](#section4.2) is in the above section.
