@@ -523,15 +523,16 @@ def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
   Measure of an investment's risk-adjusted performance, calculated by comparing its return to that of a risk-free benchmark. The risk-free benchmark will depend on the geography where the strategy is denominated and the market traded. For US and Global strategies we will be using the 13 week Treasury Bill rate.
 
   ### Formula(words)
-  1. Find the excess returns at each time $t$, $R_{excess, t}$  
+  1. Find the excess returns at each time $t$, $R_{excess, t}$:  
   $$\ R_{excess, t} = R_{strat, t} - R_{f,t} $$  
   $R_{strat, t}$: represents the strategy returns at time $t$  
   $R_{f, t}$: represents the risk-free benchmark returns at time $t$  
+
   2. Find the Sharpe Ratio:  
-  $$\ \text{Sharpe Ratio} = \frac{E(R_{excess})}{\sigma_{excess returns}} * YEARLY_LENGTH $$  
+  $$\ \text{Sharpe Ratio} = \frac{E(R_{excess})}{\sigma_{excess}} * \text{YEARLY LENGTH} $$  
   $E(R_{excess})$: represents the mean of the excess returns  
   $\sigma_{strat}$: represents the standard deviation of the excess returns  
-  $YEARLY_LENGTH$: 272, Total number of trading days per year  
+  $YEARLY LENGTH$: 272, Total number of trading days per year  
 
   ### Formula(code)
   `risk_stats['Sharpe Ratio'] = excess_rets.mean() / excess_rets.std() * np.sqrt(scale)`
@@ -547,15 +548,28 @@ def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
   </summary>
   
   ### Description
-  Average of the strategy's negative returns (returns < 0)
+  Measure of risk-adjusted returns for investment funds such as hedge funds.  
+  Note: Calmar Ratio focuses on worst-case scenario through the maximum drawdown while the Sharpe Ratio considers overall volatility  
+
   ### Formula(words)
-  $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
-  $R_w$: Represents the negative returns for month $w$
+  1. Find the excess returns at each time $t$, $R_{excess, t}$:  
+  $$\ R_{excess, t} = R_{strat, t} - R_{f,t} $$  
+  $R_{strat, t}$: represents the strategy returns at time $t$  
+  $R_{f, t}$: represents the risk-free benchmark returns at time $t$  
+
+  2. Find the Maximum Drawdown, $\ \text{Maximum Drawdown} $:  
+  Calculate [Maximum Drawdown](#section6.2) from the above section.  
+
+  3. Find the Calmar Ratio:  
+  $$\ \text{Calmar Ratio} = \frac{E(R_{excess})}{\text{Maximum Drawdown}} * \text{YEARLY LENGTH} $$  
+  $E(R_{excess})$: represents the mean of the excess returns  
+
   ### Formula(code)
-  `rets_stats['Average Losing Month'] = self.stgy_mrets[self.stgy_mrets < 0].mean()`  
+  `risk_stats['Calmar Ratio'] = excess_rets.mean() / risk_stats['Maximum Drawdown'] * scale`  
+
   ### Location  
   File: `calculation.py`  
-  Function: `cal_return_stats(self)`
+  Function: `cal_risk_stats(self)`
 </details>
 
 **Note:** Volatility is the same as Annualized Volatility in the Risk Return Profile section
