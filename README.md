@@ -30,7 +30,8 @@ Documentation for the Factsheet Calculations
     8. [Sharpe Ratio](#section6.8)
     9. [Calmar Ratio](#section6.9)
 10. [Historical Performance](#section7)
-    1. [Period](#section7.1)
+11. [Return Report](#section8)
+    1. [Period](#section8.1)
 
 ## Introduction <a id="section1"></a>
 This section is just to lay down the context for all the formulas and code
