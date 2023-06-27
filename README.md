@@ -474,12 +474,20 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   ### Description
   Refers to the correlation between the extreme events or outliers of the strategy and the market. The market will depend on the geography where the strategy is denominated and the market traded
   ### Formula(words)
-  1. Standardise the returns for series $i$ at each time $t$, Z_{i, t} where i is the `strat` or `mkt`: 
-  2. Find the weighted average portfolio returns, $Z_p$:
-  3. Find the mean of all the return series, $\ \mu_i $ where i is either `strat`, `mkt`, `portfolio (p)`
-  4. Find the expected shortfall of all the return series, $ES_i$ where i is either `strat`, `mkt`, `portfolio (p)`
-  5. Find the Tail Correlation
-  $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
+  1. Standardise the returns for series $i$ at each time $t$, Z_{i, t} where i is the `strat` or `mkt`:
+  $$\ Z_{i, t} = \frac{R_{i,t}}{\sigma_i} $$  
+  $R_{i, t}$: represents the returns of series $i$ at time $t$  
+  $\ \sigma_i $: represents the standard deviation of series $i$  
+  3. Find the weighted average portfolio return series at each time $t$, $Z_{p, t}$:  
+  $$\ Z_{p, t} = Z_{strat, t}(w) + Z_{mkt, t}(1-w) $$  
+  $w$: represents the weight assigned to the strategy
+  5. Find the mean of all the return series, $\ \mu_i $ where i is either `strat`, `mkt`, `portfolio (p)`:
+  $$\ \mu_i = \frac{\sum\limits_{t=1}^{N_i}R_{i,t}}{N_i} $$
+  $ N_i $: Total number of returns for series $i$  
+  7. Find the expected shortfall of all the return series, $ES_i$ where i is either `strat`, `mkt`, `portfolio (p)`:  
+  Use the equation in the [Expected Shortfall](#section6.4) section on each series
+  9. Find the Tail Correlation: 
+  $$\ \text{Tail Correlation} = \frac{}{} $$
   $R_w$: Represents the negative returns for month $w$
   ### Formula(code)
   ```python
