@@ -65,7 +65,7 @@ The below metrics are used to evaluate and analyze the performance of the strate
   ### Description
   Percentage return from the past 12 months  
   ### Formula(words)
-  $\ 1 \space Yr = [(1 + R_{N})(1 + R_{N-1})...(1 + R_{N-11})\]-1$  
+  $\ \text{1 Yr} = [(1 + R_{N})(1 + R_{N-1})...(1 + R_{N-11})]-1 $  
   ### Formula(code)
   `(monthly_rets.iloc[-12:] + 1).prod() - 1`
   ### Location
@@ -81,7 +81,7 @@ The below metrics are used to evaluate and analyze the performance of the strate
   ### Description
   Percentage return since the inception date
   ### Formula(words)
-  $\ Since \space Inception = [(1 + R_1)(1 + R_2)...(1 + R_{N})\]-1$  
+  $\ Since \space Inception = [(1 + R_1)(1 + R_2)...(1 + R_{N})]-1$  
   $R_i$: The percentage returns for the ith month
   ### Formula(code)
   `(monthly_rets + 1).prod() - 1`
@@ -98,8 +98,8 @@ The below metrics are used to evaluate and analyze the performance of the strate
   ### Description
   Percentage return from the start of current year to now
   ### Formula(words)
-  $\ YTD = [(1 + R_1)(1 + R_2)...(1 + R_{j})\]-1 $  
-  $R_j$: The percentage returns for the jth month of the current year
+  $\ YTD = [(1 + R_1)(1 + R_2)...(1 + R_{j})]-1 $  
+  $R_j$: The percentage returns for the j$^{th}$ month of the current year
   ### Formula(code)
   `monthly_rets.loc[datetime.datetime(monthly_rets.index[-1].year, 1, 1):] + 1).prod() - 1`
   ### Location
@@ -115,7 +115,7 @@ The below metrics are used to evaluate and analyze the performance of the strate
   ### Description
   Compound Annual Growth Rate
   ### Formula(words)
-  $\ CAGR = [(1 + R_1)(1 + R_2)...(1 + R_{N})\]^{12 \over {N}}-1 $  
+  $\ CAGR = [(1 + R_1)(1 + R_2)...(1 + R_{N})]^{12 \over {N}}-1 $  
   $R_i$: The percentage returns for the ith month
   ### Formula(code)
   `(monthly_rets + 1).prod()**(12 / len(monthly_rets)) - 1`
