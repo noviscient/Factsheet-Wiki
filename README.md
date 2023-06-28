@@ -32,6 +32,10 @@ Documentation for the Factsheet Calculations
 10. [Historical Performance](#section7)
 11. [Return Report](#section8)
     1. [Period](#section8.1)
+    2. [Worst](#section8.2)
+    3. [Average](#section8.3)
+    4. [Median](#section8.4)
+    5. [Last](#section8.5)
 
 ## Introduction <a id="section1"></a>
 This section is just to lay down the context for all the formulas and code
@@ -651,3 +655,133 @@ The metrics will be analysed using the column names as references.
   File: `calculation.py`  
   Function: `cal_return_report(self)`
 </details>
+
+<details>
+  <summary>
+      <a id="section8.2"> Best </a>
+  </summary>
+  
+  ### Description
+  This column provides the maximum return from the respective rolling period return series. 
+  ### Formula(words)
+  Let $R = {r_1, r_2, \ldots, r_n}$ represent the return series. We seek to determine $\max(R)$, which represents the maximum value within the series.
+
+  ### Formula(code)
+  ```python
+  def cal_return_report(self):
+    def f(rets):
+      return pd.Series({
+          'Best': rets.max(),
+          ...
+      })
+  ```
+
+  ### Location  
+  File: `calculation.py`  
+  Function: `cal_return_report(self)`
+</details>
+
+<details>
+  <summary>
+      <a id="section8.2"> Worst </a>
+  </summary>
+  
+  ### Description
+  This column provides the lowest return from the respective rolling period return series. 
+  ### Formula(words)
+  Let $R = {r_1, r_2, \ldots, r_n}$ represent the return series. We seek to determine $\min(R)$, which represents the minimum value within the series.
+
+  ### Formula(code)
+  ```python
+  def cal_return_report(self):
+    def f(rets):
+      return pd.Series({
+          ...
+          'Worst': rets.min(),
+          ...
+      })
+  ```
+
+  ### Location  
+  File: `calculation.py`  
+  Function: `cal_return_report(self)`
+</details>
+
+<details>
+  <summary>
+      <a id="section8.3"> Average </a>
+  </summary>
+  
+  ### Description
+  This column calculates the average return from the respective rolling period return series. 
+  ### Formula(words)
+  Let $R = {r_1, r_2, \ldots, r_n}$ represent the return series (following the rolling window calculation). We seek to determine:  
+  $\ \bar{R} = \frac{\sum\limits_{i=1}^{len(R)}R_i}{len(R)} $  
+
+  ### Formula(code)
+  ```python
+  def cal_return_report(self):
+    def f(rets):
+      return pd.Series({
+          ...
+          'Average': rets.mean(),
+          ...
+      })
+  ```
+
+  ### Location  
+  File: `calculation.py`  
+  Function: `cal_return_report(self)`
+</details>
+
+<details>
+  <summary>
+      <a id="section8.4"> Median </a>
+  </summary>
+  
+  ### Description
+  This column calculates the median return, 50th percentile, from the respective rolling period return series. 
+  ### Formula(words)
+  Let $R = {r_1, r_2, \ldots, r_n}$ represent the return series. We seek to determine the median, denoted by $\text{median}(R)$, which represents the middle value when the series is arranged in ascending or descending order.
+
+  ### Formula(code)
+  ```python
+  def cal_return_report(self):
+    def f(rets):
+      return pd.Series({
+          ...
+          'Median': rets.median(),
+          ...
+      })
+  ```
+
+  ### Location  
+  File: `calculation.py`  
+  Function: `cal_return_report(self)`
+</details>
+
+<details>
+  <summary>
+      <a id="section8.5"> Last </a>
+  </summary>
+  
+  ### Description
+  This column calculates the latest return from the respective rolling period return series. 
+  ### Formula(words)
+  Let $R = {r_1, r_2, \ldots, r_n}$ represent the return series. We seek to determine the latest return, denoted by $R_n$, which represents the latest/last value in the series.
+
+  ### Formula(code)
+  ```python
+  def cal_return_report(self):
+    def f(rets):
+      return pd.Series({
+          ...
+          'Last': rets.iloc[-1]
+      })
+  ```
+
+  ### Location  
+  File: `calculation.py`  
+  Function: `cal_return_report(self)`
+</details>
+
