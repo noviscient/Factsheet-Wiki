@@ -185,7 +185,7 @@ In this section, the given strategy's monthly performance is compared against ce
 
 ## Risk Return Profile <a id="section4"></a>
 **Description**:  
-In this section, the strategy and its respective benchmarks annualized return and annualized volatility will be reflected on graph
+In this section, the strategy and its respective benchmarks' annualized return and volatility will be reflected on the graph
 ![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/f287af28-c961-4896-a6a4-b4302b9c8d42)  
 **Location within Factsheet**: Page 1, top left hand side
 
