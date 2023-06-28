@@ -201,8 +201,7 @@ In this section, the strategy and its respective benchmarks' annualized return a
   $\bar{R}$: The mean of the daily returns  
   $\text{Yearly Length}$: The total number of trading days per year, 252
   ### Formula(code)
-  `rr_mu = rets_for_rr.mean() * YEARLY_LENGTH`  
-  `YEARLY_LENGTH`: Number of trading days per year, 252  
+  `rr_mu = rets_for_rr.mean() * Yearly Length`  
   `rets_for_rr`: pandas.DataFrame of the daily returns of the strategy and its respective benchmarks
   ### Location  
   File: `plotting.py`  
