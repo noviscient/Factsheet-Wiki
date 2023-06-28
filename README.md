@@ -195,7 +195,7 @@ In this section, the strategy and its respective benchmarks' annualized return a
   </summary>
   
   ### Description
-  A measure of how much an investment has increased on average each year, in a specific time period.
+  A measure of how much the fund's returns has increased on average each year, over a one-year time period.
   ### Formula(words)
   $\ Annualized \space Return = \bar{R} * \text{Yearly Length} $  
   $\bar{R}$: The mean of the daily returns  
@@ -214,12 +214,12 @@ In this section, the strategy and its respective benchmarks' annualized return a
   </summary>
   
   ### Description
-  A measure of the dispersion of returns of a financial instrument over a given period, expressed in terms of an annualized standard deviation. The y-axis of the graph
+  Is a measure of the fluctuation or variability of an funds's returns over a one-year period.
   ### Formula(words)
-  $\ Annualized \space Volatility = \sigma * \sqrt{252} $  
+  $\ Annualized \space Volatility = \sigma * \sqrt{\text{Yearly Length}} $  
   $\sigma$: Standard deviation of the daily returns
   ### Formula(code)
-  `rr_std = rets_for_rr.std() * np.sqrt(YEARLY_LENGTH)`  
+  `rr_std = rets_for_rr.std() * np.sqrt(Yearly Length)`  
   ### Location  
   File: `plotting.py`  
   Function: `plot_risk_return_profile(self)`
