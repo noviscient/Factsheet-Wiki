@@ -624,9 +624,9 @@ The metrics will be analysed using the column names as references.
   ### Formula(words)
   1. Find the rolling calculation size:
   To do this we find the total number of months present in the period. For example:    
-  $$\ \begin{align*}
+  $$\ \begin{align*} \\
   \text{Window Size (6 Months)} &= 6 \\
-  \text{Window Size (3 Years)} &= 3 \times 12 = 36
+  \text{Window Size (3 Years)} &= 3 \times 12 = 36 \\
   \end{align*} $$  
 
   2. Calculate the compounded return for each month $m$, $R_m$:
