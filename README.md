@@ -197,8 +197,9 @@ In this section, the strategy and its respective benchmarks' annualized return a
   ### Description
   A measure of how much an investment has increased on average each year, in a specific time period.
   ### Formula(words)
-  $\ Annualized \space Return = \bar{R} * 252 $  
-  $\bar{R}$: The mean of the daily returns
+  $\ Annualized \space Return = \bar{R} * \text{Yearly Length} $  
+  $\bar{R}$: The mean of the daily returns  
+  $\text{Yearly Length}$: The total number of trading days per year, 252
   ### Formula(code)
   `rr_mu = rets_for_rr.mean() * YEARLY_LENGTH`  
   `YEARLY_LENGTH`: Number of trading days per year, 252  
