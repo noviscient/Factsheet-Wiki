@@ -896,7 +896,7 @@ A table that displays the statistics for the top 5 maximum drawdown depth values
   Refers to the duration it takes for the strategy to fully recover from a drawdown and reach a new peak value (when the drawdown becomes 0). The estimated length of time will be rounded up.
   ### Formula(words)
   Given that for that drawdown event, the strategy reaches a new peak value (drawdown becomes 0),  
-  $\ \text{Recovery (Months)} = \lceil \text{Recovery Date} - \text{Valley Date} \rceil $
+  $\ \text{Recovery (Months)} = \lceil \text{Recovery Date} - \text{Valley Date} \rceil $  
   $\ \lceil x \rceil $: Rounding up the $x$ value  
   $\ \text{Valley Date} $: The date the strategy reaches its maximum drawdown during each drawdown period  
   $\ \text{Recovery Date} $: The date when the strategy reached its highest value after the date the strategy experienced its maximum drawdown
