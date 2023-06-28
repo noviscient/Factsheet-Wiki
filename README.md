@@ -36,6 +36,9 @@ Documentation for the Factsheet Calculations
     3. [Average](#section8.3)
     4. [Median](#section8.4)
     5. [Last](#section8.5)
+12. [Distribution of Monthly Returns](#section9)
+13. [Maximum Drawdown and Recovery](#section10)
+14. [Daily Drawdown](#section11)
 
 ## Introduction <a id="section1"></a>
 This section is just to lay down the context for all the formulas and code
@@ -326,17 +329,21 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   </summary>
   
   ### Description
-  A measure of an asset's largest price drop from peak to a trough
+  A measure of the strategy's largest drop in returns from peak to a trough (lowest point), before the strategy starts to recover.  
   ### Formula(words)
-  1. Compute the cumulative returns series:
+  1. Compute the cumulative returns series, $C$:
+     $$\ C = [C_1, C_2, \ldots , C_T] $$  
+     where the C_t, the cumulative return at each time point $t$, is calculated by:
      $$\ C_t = \prod\limits_{i=0}^{t} (1 + R_i) $$
      where $t$ represents the date of the returns series.
-  2. Calculate the drawdown series:
+  2. Calculate the drawdown series, $D$:
+     $$\ D = [D_1, D_2, \ldots , D_T] $$  
+     where the D_t, the drawdown at each time period $t$, is calculated by 
      $$\ D_t = \frac{C_t}{{\max\limits_{i=0}^{t}(C_i)}} - 1 $$
-     where $D_t$ represents the drawdown at time $t$ and $\max\limits_{i=0}^{t}(C_i)$ is the maximum cumulative returns observed up to time $t$
+     where $\max\limits_{i=0}^{t}(C_i)$ is the maximum cumulative return observed up to time $t$
   3. Find the absolute maximum drawdown:
-     $$\ \text{Max Drawdown} = \left| \min_{t}(D_t) \right| $$
-     where $\\text{Max Drawdown}$ represents the absolute value of the lowest drawdown observed. 
+     $$\ \text{Max Drawdown} = \left| \min(D) \right| $$
+     where $\ \text{Max Drawdown} $ represents the absolute value of the lowest drawdown observed in the specified time period and $D$ represents the whole drawdown time series
   ### Formula(code)
   ```python
   def cal_underwater(rets):
@@ -785,3 +792,215 @@ The metrics will be analysed using the column names as references.
   Function: `cal_return_report(self)`
 </details>
 
+## Distribution of Monthly Returns <a id="section9"></a>
+**Description**:  
+
+**Location:**  Page 2, Top right hand side
+
+## Maximum Drawdown and Recovery <a id="section10"></a>
+**Description**:  
+A table that displays the statistics for the top 5 maximum drawdown depth values which represent the downturns in the strategy. The section also describe other drawdown values such as the Length (Months), Recovery (Months), Start Date and End date of the drawdown. 
+
+**Location:**  Page 2, Below the Return Report section
+
+<details>
+  <summary>
+      <a id="section10.1"> Depth (%) </a>
+  </summary>
+  
+  ### Description
+  Measures the magnitude of the loss experienced during the drawdown period. 
+  ### Formula(words)
+  The formula used is the same as the one in the [Maximum Drawdown](#section6.2) however the difference is in the last step where instead of finding the absolute value, we find the actual value:  
+  $$\ \text{Depth} = \min_{t}(D) $$
+  where $Depth$ represents the actual value of the lowest drawdown observed. Then we can convert it to percentage by multipling $Depth$ by 100.  
+
+  ### Formula(code)
+  ```python
+  def cal_drawdown_report(self):
+    def get_max_dd_report(underwater):
+        depth = underwater.min()
+        ...
+        return depth, peak, valley, recovery
+    ...
+    underwater = cal_underwater(self.stgy_rets)
+    for i in range(5):
+      try:
+        depth, peak, valley, recovery = get_max_dd_report(
+            underwater.values)
+      ...
+      dd_report['Depth (%)'] = depth * 100
+      ...
+  ```
+
+  ### Location  
+  File: `calculation.py`  
+  Function: `cal_drawdown_report(self)`
+</details>
+
+<details>
+  <summary>
+      <a id="section10.2"> Length (Months) </a>
+  </summary>
+  
+  ### Description
+  The length of time, in months, from the peak to the respective valley for each drawdown event. The estimated length of time will be rounded up.
+  ### Formula(words)
+  $\ \text{Length (Months)} = \lceil \text{Valley Date} - \text{Peak Date} \rceil $  
+  $\ \lceil x \rceil $: Rounding up the $x$ value  
+  $\ \text{Valley Date} $: The date the strategy reaches its maximum drawdown during each drawdown period  
+  $\ \text{Peak Date} $: The date when the strategy reached its highest value before experiencing its largest decline until the $\ \text{Valley Date} $
+  ### Formula(code)
+  ```python
+  def cal_drawdown_report(self):
+    def get_max_dd_report(underwater):
+      depth = underwater.min()
+      ...
+      return depth, peak, valley, recovery
+    ...
+    def f(d1, d2):
+            return np.ceil((d1.year - d2.year) * 12 + (d1.month - d2.month) +
+                           (d1.day - d2.day) / 32)
+    underwater = cal_underwater(self.stgy_rets)
+    for i in range(5):
+      try:
+        # print(f'Underwater {i}:{underwater}')
+        depth, peak, valley, recovery = get_max_dd_report(
+        underwater.values)
+      except IndexError:
+        break
+      ...
+      start_date, valley_date = underwater.index[peak], underwater.index[valley]
+      ...
+      dd_report['Length (Months)'] = f(valley_date, start_date)
+      ...
+  ```
+
+  ### Location  
+  File: `calculation.py`  
+  Function: `cal_drawdown_report(self)`
+</details>
+
+<details>
+  <summary>
+      <a id="section10.3"> Recovery (Months) </a>
+  </summary>
+  
+  ### Description
+  Refers to the duration it takes for the strategy to fully recover from a drawdown and reach a new peak value (when the drawdown becomes 0). The estimated length of time will be rounded up.
+  ### Formula(words)
+  Given that for that drawdown event, the strategy reaches a new peak value (drawdown becomes 0),  
+  $\ \text{Recovery (Months)} = \lceil \text{Recovery Date} - \text{Valley Date} \rceil $
+  $\ \lceil x \rceil $: Rounding up the $x$ value  
+  $\ \text{Valley Date} $: The date the strategy reaches its maximum drawdown during each drawdown period  
+  $\ \text{Recovery Date} $: The date when the strategy reached its highest value after the date the strategy experienced its maximum drawdown
+  ### Formula(code)
+  ```python
+  def cal_drawdown_report(self):
+    def get_max_dd_report(underwater):
+      depth = underwater.min()
+      ...
+      return depth, peak, valley, recovery
+    ...
+    def f(d1, d2):
+            return np.ceil((d1.year - d2.year) * 12 + (d1.month - d2.month) +
+                           (d1.day - d2.day) / 32)
+    underwater = cal_underwater(self.stgy_rets)
+    for i in range(5):
+      try:
+        # print(f'Underwater {i}:{underwater}')
+        depth, peak, valley, recovery = get_max_dd_report(
+        underwater.values)
+      except IndexError:
+        break
+      ...
+      if not pd.isnull(recovery):
+        end_date = underwater.index[recovery]
+        rec = f(end_date, valley_date)
+      else:
+        end_date = np.nan
+        rec = np.nan
+      dd_report['Recovery (Months)'] = rec
+      ...
+  ```
+
+  ### Location  
+  File: `calculation.py`  
+  Function: `cal_drawdown_report(self)`
+</details>
+
+<details>
+  <summary>
+      <a id="section10.4"> Start Date </a>
+  </summary>
+  
+  ### Description
+  Refers to the beginning of the drawdown period. The date when the strategy reaches its peak value before declining to the maximum drawdown value. 
+  ### Formula(words)
+  For the respective drawdown events,  
+  $\ \text{Start Date} = \text{Peak Date} $
+  ### Formula(code)
+  ```python
+  def cal_drawdown_report(self):
+    def get_max_dd_report(underwater):
+      depth = underwater.min()
+      ...
+      return depth, peak, valley, recovery
+    ...
+    underwater = cal_underwater(self.stgy_rets)
+    for i in range(5):
+      try:
+        # print(f'Underwater {i}:{underwater}')
+        depth, peak, valley, recovery = get_max_dd_report(
+        underwater.values)
+      except IndexError:
+        break
+      ...
+      start_date, valley_date = underwater.index[peak], underwater.index[valley]
+      ...
+      dd_report['Start date'] = start_date
+      ...
+  ```
+
+  ### Location  
+  File: `calculation.py`  
+  Function: `cal_drawdown_report(self)`
+</details>
+
+<details>
+  <summary>
+      <a id="section10.5"> End Date </a>
+  </summary>
+  
+  ### Description
+  Refers to the end of the drawdown period. The date when the strategy reaches its valley value. 
+  ### Formula(words)
+  For the respective drawdown events,  
+  $\ \text{End Date} = \text{Valley Date} $
+  ### Formula(code)
+  ```python
+  def cal_drawdown_report(self):
+    def get_max_dd_report(underwater):
+      depth = underwater.min()
+      ...
+      return depth, peak, valley, recovery
+    ...
+    underwater = cal_underwater(self.stgy_rets)
+    for i in range(5):
+      try:
+        # print(f'Underwater {i}:{underwater}')
+        depth, peak, valley, recovery = get_max_dd_report(
+        underwater.values)
+      except IndexError:
+        break
+      ...
+      start_date, valley_date = underwater.index[peak], underwater.index[valley]
+      ...
+      dd_report['End date'] = valley_date
+      ...
+  ```
+
+  ### Location  
+  File: `calculation.py`  
+  Function: `cal_drawdown_report(self)`
+</details>
