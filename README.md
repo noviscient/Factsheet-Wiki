@@ -140,7 +140,7 @@ In this section, the given strategy's monthly performance is compared against ce
   </summary>
   
   ### Description
-  A graph that shows the monthly performance of the fund and its respective benchmarks
+  A graph that shows the monthly performance of the fund against its respective benchmarks
   ### Graph Plot Location
   File: `plotting.py`  
   Function: `plot_cum_rets()`  
