@@ -609,8 +609,8 @@ def format_table(self, version):
 **Description**:  
 The past performance of the strategy based on the rolling period the returns have been calculated on. It will also describe the returns by displaying the best, worst, average, median and last returns for each different period.  
 
-The metrics will be analysed using the column names as references.
-
+The metrics will be analysed using the column names as references.  
+![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/5ca953c4-3aa6-46ac-a91a-29e875cedb76)  
 **Location within Factsheet:**  Page 2, top left of the page  
 
 <details>
@@ -619,8 +619,7 @@ The metrics will be analysed using the column names as references.
   </summary>
   
   ### Description
-  This column provides the rolling window calculation size for the monthly returns.  
-
+  This column provides the rolling window calculation size for the monthly returns.   
   ### Formula(words)
   1. Find the rolling calculation size:
   To do this we find the total number of months present in the period. For example:   
