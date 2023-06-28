@@ -47,13 +47,13 @@ Documentation for the Factsheet Calculations
 
 
 ## Introduction <a id="section1"></a>
-This section is just to lay down the context for all the formulas and code
-1. $N$: Represents the total number of months the strategy has been active(?)
-2. $R_n$: Represents the **percentage returns** of the strategy for the $nth$ month
+This section details the definition, formulas and code used for each metric in the factsheet. 
+1. $N$: The total number of months the strategy has been active
+2. $R_n$: The percentage returns of the strategy for the $nth$ month
 3. `monthly_rets`: pd.Series type which represents all the months and its respective returns for each month
 ## Performance Metrics <a id="section2"></a>
 **Description:**
-The below metrics are used to evaluate and analyze the performance of the strategy over a specific period of time 
+The below metrics are used to evaluate and analyze the performance of the strategy over a specific period of time  
 **Diagram:**  
 ![image](https://github.com/gabrielyong4/Analytics-Project/assets/114644478/cfabcee2-7fee-4b29-94bc-5af895aa99a0)  
 **Location within Factsheet**: Page 1, top left hand side
@@ -82,7 +82,7 @@ The below metrics are used to evaluate and analyze the performance of the strate
   Percentage return since the inception date
   ### Formula(words)
   $\ Since \space Inception = [(1 + R_1)(1 + R_2)...(1 + R_{N})\]-1$  
-  $R_i$: Represents the percentage returns for the ith month
+  $R_i$: The percentage returns for the ith month
   ### Formula(code)
   `(monthly_rets + 1).prod() - 1`
   ### Location
@@ -98,8 +98,8 @@ The below metrics are used to evaluate and analyze the performance of the strate
   ### Description
   Percentage return from the start of current year to now
   ### Formula(words)
-  $\YTD = [(1 + R_1)(1 + R_2)...(1 + R_{j})\]-1$  
-  $R_j$: Represents the percentage returns for the jth month of the current year
+  $\ YTD = [(1 + R_1)(1 + R_2)...(1 + R_{j})\]-1 $  
+  $R_j$: The percentage returns for the jth month of the current year
   ### Formula(code)
   `monthly_rets.loc[datetime.datetime(monthly_rets.index[-1].year, 1, 1):] + 1).prod() - 1`
   ### Location
@@ -115,8 +115,8 @@ The below metrics are used to evaluate and analyze the performance of the strate
   ### Description
   Compound Annual Growth Rate
   ### Formula(words)
-  $\CAGR = [(1 + R_1)(1 + R_2)...(1 + R_{N})\]^{12 \over {N}}-1$  
-  $R_i$: Represents the percentage returns for the ith month
+  $\ CAGR = [(1 + R_1)(1 + R_2)...(1 + R_{N})\]^{12 \over {N}}-1 $  
+  $R_i$: The percentage returns for the ith month
   ### Formula(code)
   `(monthly_rets + 1).prod()**(12 / len(monthly_rets)) - 1`
   ### Location
@@ -198,7 +198,7 @@ In this section, the strategy and its respective benchmarks annualized return an
   A measure of how much an investment has increased on average each year, during a specific time period. The y-axis of the graph
   ### Formula(words)
   $\ Annualized \space Return = \bar{R} * 252 $  
-  $\bar{R}$: Represents the mean of the daily returns
+  $\bar{R}$: The mean of the daily returns
   ### Formula(code)
   `rr_mu = rets_for_rr.mean() * YEARLY_LENGTH`  
   `YEARLY_LENGTH`: Number of trading days per year, 252  
@@ -274,7 +274,7 @@ In this section, the metrics are used to evaluate the returns from the chosen st
   Average of the strategy's positive returns (returns > 0)
   ### Formula(words)
   $\ Average \space Winning \space Month = \frac{R_1 + R_2 + ... + R_W}{W}  $  
-  $R_w$: Represents the positive returns for month $w$
+  $R_w$: The positive returns for month $w$
   ### Formula(code)
   `rets_stats['Average Winning Month'] = self.stgy_mrets[self.stgy_mrets > 0].mean()`  
   ### Location  
@@ -291,7 +291,7 @@ In this section, the metrics are used to evaluate the returns from the chosen st
   Average of the strategy's negative returns (returns < 0)
   ### Formula(words)
   $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
-  $R_w$: Represents the negative returns for month $w$
+  $R_w$: The negative returns for month $w$
   ### Formula(code)
   `rets_stats['Average Losing Month'] = self.stgy_mrets[self.stgy_mrets < 0].mean()`  
   ### Location  
@@ -341,7 +341,7 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
      $$\ C = [C_1, C_2, \ldots , C_T] $$  
      where the C_t, the cumulative return at each time point $t$, is calculated by:
      $$\ C_t = \prod\limits_{i=0}^{t} (1 + R_i) $$
-     where $t$ represents the date of the returns series.
+     where $t$ The date of the returns series.
   2. Calculate the drawdown series, $D$:
      $$\ D = [D_1, D_2, \ldots , D_T] $$  
      where the D_t, the drawdown at each time period $t$, is calculated by 
@@ -349,7 +349,7 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
      where $\max\limits_{i=0}^{t}(C_i)$ is the maximum cumulative return observed up to time $t$
   3. Find the absolute maximum drawdown:
      $$\ \text{Max Drawdown} = \left| \min(D) \right| $$
-     where $\ \text{Max Drawdown} $ represents the absolute value of the lowest drawdown observed in the specified time period and $D$ represents the whole drawdown time series
+     where $\ \text{Max Drawdown} $ The absolute value of the lowest drawdown observed in the specified time period and $D$ The whole drawdown time series
   ### Formula(code)
   ```python
   def cal_underwater(rets):
@@ -378,7 +378,7 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   Measures the extent of possible financial losses within the strategy/product over a specific time frame given a certain significance level (alpha)
   ### Formula(words)
   $\ \text{Value at Risk} = Q(\alpha, \text{rets}) $  
-  $\ \alpha$: Represents the significance level  
+  $\ \alpha$: The significance level  
   $rets$: Represents all the returns in the strategy  
   $Q$: Finds the quantile based on the significance level and the returns in the strategy
   ### Formula(code)
@@ -410,7 +410,7 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   ### Formula(words)
   Given $\ \alpha < 0.05$,
   $$\ \text{ES} = \frac{1}{N_<} \sum\limits_{i=1}^{N<} x_i $$  
-  $N_<$: Represents the number of returns lesser than the $\ \alpha$ quantile  
+  $N_<$: The number of returns lesser than the $\ \alpha$ quantile  
   $x_i$: Represents each return in the set
   ### Formula(code)
   ```python
@@ -473,9 +473,9 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   ### Formula(words)
   $\ correlation = \frac{{\sum ((x - \bar{x})(y - \bar{y}))}}{{\sqrt{{\sum ((x - \bar{x})^2)}} \cdot \sqrt{{\sum ((y - \bar{y})^2)}}}} $   
   $x$: represents one set of stock returns  
-  $y$: represents the other set of stock returns  
-  $\bar{x}$: represents the mean (average) of the x values.  
-  #\bar{y}$: represents the mean (average) of the y values.  
+  $y$: The other set of stock returns  
+  $\bar{x}$: The mean (average) of the x values.  
+  #\bar{y}$: The mean (average) of the y values.  
   ### Formula(code)
   `risk_stats['Correlation (Market Index)'] = rets_all[[
             self.stgy_rets.name, self.market_rets.name
@@ -495,11 +495,11 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   ### Formula(words)
   1. Standardise the returns for series $i$ at each time $t$, Z_{i, t} where i is the `strat` or `mkt`:
   $$\ Z_{i, t} = \frac{R_{i,t}}{\sigma_i} $$  
-  $R_{i, t}$: represents the returns of series $i$ at time $t$  
-  $\ \sigma_i $: represents the standard deviation of series $i$  
+  $R_{i, t}$: The returns of series $i$ at time $t$  
+  $\ \sigma_i $: The standard deviation of series $i$  
   2. Find the weighted average portfolio return series at each time $t$, $Z_{p, t}$:  
   $$\ Z_{p, t} = Z_{strat, t}(w) + Z_{mkt, t}(1-w) $$  
-  $w$: represents the weight assigned to the strategy
+  $w$: The weight assigned to the strategy
   3. Find the mean of all the return series, $\ \mu_i $ where i is either `strat`, `mkt`, `portfolio (p)`:
   $$\ \mu_i = \frac{\sum\limits_{t=1}^{N_i}R_{i,t}}{N_i} $$
   $ N_i $: Total number of returns for series $i$  
@@ -544,13 +544,13 @@ def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
   ### Formula(words)
   1. Find the excess returns at each time $t$, $R_{excess, t}$:  
   $$\ R_{excess, t} = R_{strat, t} - R_{f,t} $$  
-  $R_{strat, t}$: represents the strategy returns at time $t$  
-  $R_{f, t}$: represents the risk-free benchmark returns at time $t$  
+  $R_{strat, t}$: The strategy returns at time $t$  
+  $R_{f, t}$: The risk-free benchmark returns at time $t$  
 
   2. Find the Sharpe Ratio:  
   $$\ \text{Sharpe Ratio} = \frac{E(R_{excess})}{\sigma_{excess}} * \sqrt{\text{YEARLY LENGTH}} $$  
-  $E(R_{excess})$: represents the mean of the excess returns  
-  $\sigma_{strat}$: represents the standard deviation of the excess returns  
+  $E(R_{excess})$: The mean of the excess returns  
+  $\sigma_{strat}$: The standard deviation of the excess returns  
   $YEARLY LENGTH$: 272, Total number of trading days per year  
 
   ### Formula(code)
@@ -573,15 +573,15 @@ def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
   ### Formula(words)
   1. Find the excess returns at each time $t$, $R_{excess, t}$:
   $$\ R_{excess, t} = R_{strat, t} - R_{f,t} $$  
-  $R_{strat, t}$: represents the strategy returns at time $t$  
-  $R_{f, t}$: represents the risk-free benchmark returns at time $t$  
+  $R_{strat, t}$: The strategy returns at time $t$  
+  $R_{f, t}$: The risk-free benchmark returns at time $t$  
 
   2. Find the Maximum Drawdown, $\ \text{Maximum Drawdown} $:  
   Calculate [Maximum Drawdown](#section6.2) from the above section.  
 
   3. Find the Calmar Ratio:  
   $$\ \text{Calmar Ratio} = \frac{E(R_{excess})}{\text{Maximum Drawdown}} * \text{YEARLY LENGTH} $$  
-  $E(R_{excess})$: represents the mean of the excess returns  
+  $E(R_{excess})$: The mean of the excess returns  
   $YEARLY LENGTH$: 272, Total number of trading days per year  
 
   ### Formula(code)
@@ -603,8 +603,8 @@ The past performance of the strategy
 ### Formula(words)
 Converting the daily returns into monthly returns for each month $m$, $R_m$:
 $$\ R_m = [(D_1 + 1)(D_2 + 1)...(D_I + 1)] - 1 $$
-$D_i$: represents the return on day $i$ in month $m$
-$I$: represents the total number of days in that month $m$
+$D_i$: The return on day $i$ in month $m$
+$I$: The total number of days in that month $m$
 ### Formula(code)
 Plotting of the graph code
 ```python
@@ -677,7 +677,7 @@ The metrics will be analysed using the column names as references.
   ### Description
   This column provides the maximum return from the respective rolling period return series. 
   ### Formula(words)
-  Let $R = {r_1, r_2, \ldots, r_n}$ represent the return series. We seek to determine $\max(R)$, which represents the maximum value within the series.
+  Let $R = {r_1, r_2, \ldots, r_n}$ represent the return series. We seek to determine $\max(R)$, which The maximum value within the series.
 
   ### Formula(code)
   ```python
@@ -702,7 +702,7 @@ The metrics will be analysed using the column names as references.
   ### Description
   This column provides the lowest return from the respective rolling period return series. 
   ### Formula(words)
-  Let $R = {r_1, r_2, \ldots, r_n}$ represent the return series. We seek to determine $\min(R)$, which represents the minimum value within the series.
+  Let $R = {r_1, r_2, \ldots, r_n}$ represent the return series. We seek to determine $\min(R)$, which The minimum value within the series.
 
   ### Formula(code)
   ```python
@@ -755,7 +755,7 @@ The metrics will be analysed using the column names as references.
   ### Description
   This column calculates the median return, 50th percentile, from the respective rolling period return series. 
   ### Formula(words)
-  Let $R = {r_1, r_2, \ldots, r_n}$ represent the return series. We seek to determine the median, denoted by $\text{median}(R)$, which represents the middle value when the series is arranged in ascending or descending order.
+  Let $R = {r_1, r_2, \ldots, r_n}$ represent the return series. We seek to determine the median, denoted by $\text{median}(R)$, which The middle value when the series is arranged in ascending or descending order.
 
   ### Formula(code)
   ```python
@@ -781,7 +781,7 @@ The metrics will be analysed using the column names as references.
   ### Description
   This column calculates the latest return from the respective rolling period return series. 
   ### Formula(words)
-  Let $R = {r_1, r_2, \ldots, r_n}$ represent the return series. We seek to determine the latest return, denoted by $R_n$, which represents the latest/last value in the series.
+  Let $R = {r_1, r_2, \ldots, r_n}$ represent the return series. We seek to determine the latest return, denoted by $R_n$, which The latest/last value in the series.
 
   ### Formula(code)
   ```python
@@ -820,7 +820,7 @@ A table that displays the statistics for the top 5 maximum drawdown depth values
   ### Formula(words)
   The formula used is the same as the one in the [Maximum Drawdown](#section6.2) however the difference is in the last step where instead of finding the absolute value, we find the actual value:  
   $$\ \text{Depth} = \min_{t}(D) $$
-  where $Depth$ represents the actual value of the lowest drawdown observed. Then we can convert it to percentage by multipling $Depth$ by 100.  
+  where $Depth$ The actual value of the lowest drawdown observed. Then we can convert it to percentage by multipling $Depth$ by 100.  
 
   ### Formula(code)
   ```python
