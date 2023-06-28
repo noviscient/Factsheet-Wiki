@@ -805,7 +805,8 @@ The metrics will be analysed using the column names as references.
 
 ## Maximum Drawdown and Recovery <a id="section10"></a>
 **Description**:  
-A table that displays the statistics for the top 5 maximum drawdown depth values which represent the downturns in the strategy. The section also describe other drawdown values such as the Length (Months), Recovery (Months), Start Date and End date of the drawdown. 
+A table that displays the statistics for the top 5 maximum drawdown depth values which represent the downturns in the strategy. The section also describe other drawdown values such as the `Length (Months)`, `Recovery (Months)`, `Start date` and `End date` of the drawdown.  
+<img width="351" alt="image" src="https://github.com/noviscient/Factsheet-Wiki/assets/114644478/91878dab-ebdc-4b43-a4f9-0077263239a7">  
 
 **Location:**  Page 2, Below the Return Report section
 
