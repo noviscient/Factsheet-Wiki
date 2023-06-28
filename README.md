@@ -195,7 +195,7 @@ In this section, the strategy and its respective benchmarks' annualized return a
   </summary>
   
   ### Description
-  A measure of how much an investment has increased on average each year, during a specific time period. The y-axis of the graph
+  A measure of how much an investment has increased on average each year, in a specific time period.
   ### Formula(words)
   $\ Annualized \space Return = \bar{R} * 252 $  
   $\bar{R}$: The mean of the daily returns
