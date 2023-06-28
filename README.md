@@ -38,7 +38,13 @@ Documentation for the Factsheet Calculations
     5. [Last](#section8.5)
 12. [Distribution of Monthly Returns](#section9)
 13. [Maximum Drawdown and Recovery](#section10)
+    1. [Depth ($)](#section10.1)
+    2. [Length (Months)](#section10.2)
+    3. [Recovery (Months)](#section10.3)
+    4. [Start Date](#section10.4)
+    5. [End Date](#section10.5)
 14. [Daily Drawdown](#section11)
+
 
 ## Introduction <a id="section1"></a>
 This section is just to lay down the context for all the formulas and code
