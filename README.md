@@ -49,7 +49,7 @@ Documentation for the Factsheet Calculations
 ## Introduction <a id="section1"></a>
 This section details the definition, formulas and code used for each metric in the factsheet. 
 1. $N$: The total number of months the strategy has been active
-2. $R_n$: The percentage returns of the strategy for the $nth$ month
+2. $R_n$: The percentage returns of the strategy for the $n^{th}$ month
 3. `monthly_rets`: pd.Series type which represents all the months and its respective returns for each month
 ## Performance Metrics <a id="section2"></a>
 **Description:**
@@ -82,7 +82,7 @@ The below metrics are used to evaluate and analyze the performance of the strate
   Percentage return since the inception date
   ### Formula(words)
   $\ Since \space Inception = [(1 + R_1)(1 + R_2)...(1 + R_{N})]-1$  
-  $R_i$: The percentage returns for the ith month
+  $R_i$: The percentage returns for the $i^{th}$ month
   ### Formula(code)
   `(monthly_rets + 1).prod() - 1`
   ### Location
@@ -99,7 +99,7 @@ The below metrics are used to evaluate and analyze the performance of the strate
   Percentage return from the start of current year to now
   ### Formula(words)
   $\ YTD = [(1 + R_1)(1 + R_2)...(1 + R_{j})]-1 $  
-  $R_j$: The percentage returns for the j$^{th}$ month of the current year
+  $R_j$: The percentage returns for the $j^{th}$ month of the current year
   ### Formula(code)
   `monthly_rets.loc[datetime.datetime(monthly_rets.index[-1].year, 1, 1):] + 1).prod() - 1`
   ### Location
