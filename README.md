@@ -45,6 +45,7 @@ Documentation for the Factsheet Calculations
     5. [End Date](#section10.5)
 14. [Daily Drawdown](#section11)
 15. [Rolling Return](#section12)
+16. [Rolling Volatility](#section13)
 
 
 ## Introduction <a id="section1"></a>
@@ -553,7 +554,7 @@ def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
   $$\ \text{Sharpe Ratio} = \frac{E(R_{excess})}{\sigma_{excess}} * \sqrt{\text{YEARLY LENGTH}} $$  
   $E(R_{excess})$: The mean of the excess returns  
   $\sigma_{strat}$: The standard deviation of the excess returns  
-  $YEARLY LENGTH$: 272, Total number of trading days per year  
+  $YEARLY LENGTH$: 252, Total number of trading days per year  
 
   ### Formula(code)
   `risk_stats['Sharpe Ratio'] = excess_rets.mean() / excess_rets.std() * np.sqrt(scale)`
@@ -584,7 +585,7 @@ def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
   3. Find the Calmar Ratio:  
   $$\ \text{Calmar Ratio} = \frac{E(R_{excess})}{\text{Maximum Drawdown}} * \text{YEARLY LENGTH} $$  
   $E(R_{excess})$: The mean of the excess returns  
-  $YEARLY LENGTH$: 272, Total number of trading days per year  
+  $YEARLY LENGTH$: 252, Total number of trading days per year  
 
   ### Formula(code)
   `risk_stats['Calmar Ratio'] = excess_rets.mean() / risk_stats['Maximum Drawdown'] * scale`  
@@ -1079,25 +1080,28 @@ Function: `plot_underwater(self)`
 
 ## Rolling Return <a id="section12"></a>
 **Description**:  
-A line graph of the strategy's/product's annualised return with a one year rolling window (252 trading days) and one month frequency (21 trading days) against its benchmark and market returns.  
+A line graph of the strategy's/product's annualised return with 1 month expanding rolling window against its benchmark and market returns.  
 The benchmark and market will depend on the geography where the strategy/product is denominated and the market traded.
 
 **Factsheet Location:**  Page 2, Below the Maximum Drawdown and Recovery Report
 
 ### Formula
-For each of the returns, we want to calculate the Rolling Return series, $RR$ (with a one year rolling window and a one month frequency). 
+For each of the returns, we want to calculate the Rolling Return series, $RR$ (with a 1 month expanding rolling window). 
 
-1. Compute the rolling mean returns series with a one month frequency, $\ \mu $:  
-$$\ \mu = [\mu_t, \mu_{t+1}, \ldots , \mu_T] $$ 
+1. Compute the 1 month expanding rolling window mean returns series, $\ \mu $:  
+$$\ \mu = [\mu_1, \mu_{22}, \mu_{43}, \ldots , \mu_T] $$ 
 where for each $\ \mu_t $,
 $$\ \mu_t = \frac{\sum\limits_{t-21}^{t}\R_i}{t} $$    
-$\ \mu_t $: Mean of the returns from $t-21$ to $t$ days  
+$\ \mu_t $: Mean of the returns for day $t$ 
 $R_i$: Returns on the $i^{th}$ day
 
+Note: It is important to note that the expanding window includes all available data up to the current time point. As time progresses, the window expands, incorporating additional data points and adjusting the rolling return calculation accordingly. For example, $\ \mu{43} $ will find them mean of the returns from the 1st day to the 43rd day.
+
 2. Compute the annualised returns with a one-year rolling window, $RR$  
-$$\ RR = [RR_t, RR_{t+1}, \ldots , RR_T] $$ where for each $\ RR_t $,  
+$$\ RR = [RR_1, RR_{22}, \ldots , RR_T] $$ where for each $\ RR_t $,  
 $$\ RR_t = \mu_t * \text{Yearly Length} $$  
 $\ RR_t $: Rolling Return on day $t$  
+$\ \text{Yearly Length} $: Total Number of Trading days in a year, 252
 
 ### Code
 In the `calculation.py` file, the rolling returns are calculated for all of the returns in the `cal_rolling_rets(self)` function.
