@@ -44,6 +44,7 @@ Documentation for the Factsheet Calculations
     4. [Start Date](#section10.4)
     5. [End Date](#section10.5)
 14. [Daily Drawdown](#section11)
+15. [Rolling Return](#section12)
 
 
 ## Introduction <a id="section1"></a>
@@ -192,7 +193,7 @@ In this section, the strategy and its respective benchmarks' annualized return a
 
 <details>
   <summary>
-      <a id="section4.1"> Annualized Return </a>
+      <a id="section4.1"> Annualized Returns </a>
   </summary>
   
   ### Description
@@ -1025,6 +1026,20 @@ A line graph that displays the daily drawdown of the strategy/product against it
 
 **Factsheet Location:**  Page 2, Right side of the Maximum Drawdown and Recovery Report
 
+### Formula
+For each of the returns, we want to calculate the Drawdown series $D$. We do this by:
+1. Compute the cumulative returns series, $C$:
+    $$\ C = [C_1, C_2, \ldots , C_T] $$  
+    where the C_t, the cumulative return at each time point $t$, is calculated by:
+    $$\ C_t = \prod\limits_{i=0}^{t} (1 + R_i) $$
+    where $t$ The date of the returns series.
+
+2. Calculate the drawdown series, $D$:
+    $$\ D = [D_1, D_2, \ldots , D_T] $$  
+    where the D_t, the drawdown at each time period $t$, is calculated by 
+    $$\ D_t = \frac{C_t}{{\max\limits_{i=0}^{t}(C_i)}} - 1 $$
+    where $\max\limits_{i=0}^{t}(C_i)$ is the maximum cumulative return observed up to time $t$
+
 ### Code
 In the `calculation.py` file, where the daily drawdown for all the returns are calculated:
 ```python
@@ -1053,5 +1068,77 @@ def plot_underwater(self):
 ```
 
 ### Code Location
-File: `calculation.py`,`plotting.py`  
-Function: `cal_underwater`, `cal_underwater`, `plot_underwater(self)`
+**Calculation**  
+File: `calculation.py`  
+Function: `cal_underwater`, `cal_underwater`  
+
+**Plotting**  
+File: `plotting.py`  
+Function: `plot_underwater(self)`
+
+
+## Rolling Return <a id="section12"></a>
+**Description**:  
+A line graph of the strategy's/product's annualised return with a one year rolling window (252 trading days) and one month frequency (21 trading days) against its benchmark and market returns.  
+The benchmark and market will depend on the geography where the strategy/product is denominated and the market traded.
+
+**Factsheet Location:**  Page 2, Below the Maximum Drawdown and Recovery Report
+
+### Formula
+For each of the returns, we want to calculate the Rolling Return series, $RR$ (with a one year rolling window and a one month frequency). 
+
+1. Compute the rolling mean returns series with a one month frequency, $\ \mu $:  
+$$\ \mu = [\mu_t, \mu_{t+1}, \ldots , \mu_T] $$ 
+where for each $\ \mu_t $,
+$$\ \mu_t = \frac{\sum\limits_{t-21}^{t}\R_i}{t} $$    
+$\ \mu_t $: Mean of the returns from $t-21$ to $t$ days  
+$R_i$: Returns on the $i^{th}$ day
+
+2. Compute the annualised returns with a one-year rolling window, $RR$  
+$$\ RR = [RR_t, RR_{t+1}, \ldots , RR_T] $$ where for each $\ RR_t $,  
+$$\ RR_t = \mu_t * \text{Yearly Length} $$  
+$\ RR_t $: Rolling Return on day $t$  
+
+### Code
+In the `calculation.py` file, the rolling returns are calculated for all of the returns in the `cal_rolling_rets(self)` function.
+```python
+ def cal_rolling_rets(self):
+        # Specifying the frequency and scale of the strategy/product
+        if self.freq == 'daily':
+            freq, scale = MONTH_LENGTH, YEARLY_LENGTH
+        else:
+            freq, scale = 1, 1
+
+        # Getting the return series for the strategy/product and its benchmark and market return
+        rets_all = self.rets_all[[
+            self.stgy_rets.name, self.benchmark_rets.name,
+            self.market_rets.name
+        ]]
+        rolling_rets_all = {}
+        for col in rets_all:
+            rets = rets_all[col]
+            rolling_rets = pd.Series()
+            # Rolling Period Calculation Part #
+            for i in range(0, len(rets), freq):
+                sub_rets = rets.iloc[:i + 1]
+                date = sub_rets.index[-1]
+                rolling_ret = sub_rets.mean() * scale
+                rolling_rets.loc[date] = rolling_ret
+            # Rolling Period Calculation Part #
+            rolling_rets_all[col] = rolling_rets
+        self.rolling_rets = pd.DataFrame(rolling_rets_all)
+```
+In the `plotting.py` file, this where the line graph is formatted and plotted in the `plot_rolling_rets` function.
+```python
+def plot_rolling_rets(self):
+  ...
+```
+
+### Code Location
+**Calculation**  
+File: `calculation.py`  
+Function: `cal_rolling_rets`
+
+**Plotting**  
+File: `plotting.py`  
+Function: `plot_rolling_rets(self)`
