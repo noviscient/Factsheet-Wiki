@@ -1091,7 +1091,7 @@ For each of the returns, we want to calculate the Rolling Return series, $RW$ (w
 1. Compute the 1 month expanding rolling window mean returns series, $\ \mu $:  
 $$\ \mu = [\mu_1, \mu_{22}, \mu_{43}, \ldots , \mu_T] $$ 
 where for each $\ \mu_t $,
-$$\ \mu_t = \frac{\sum\limits_{1}^{t}R_i}{t} $$  
+$$\ \mu_t = \frac{\sum\limits_{i=1}^{t}R_i}{t} $$  
 $\ \mu_t $: Mean of the returns for day $t$  
 $R_i$: Returns on the $i^{th}$ day
 
