@@ -1091,8 +1091,8 @@ For each of the returns, we want to calculate the Rolling Return series, $RW$ (w
 1. Compute the 1 month expanding rolling window mean returns series, $\ \mu $:  
 $$\ \mu = [\mu_1, \mu_{22}, \mu_{43}, \ldots , \mu_T] $$ 
 where for each $\ \mu_t $,
-$$\ \mu_t = \frac{\sum\limits_{t-21}^{t}R_i}{t} $$    
-$\ \mu_t $: Mean of the returns for day $t$ 
+$$\ \mu_t = \frac{\sum\limits_{1}^{t}R_i}{t} $$  
+$\ \mu_t $: Mean of the returns for day $t$  
 $R_i$: Returns on the $i^{th}$ day
 
 Note: It is important to note that the expanding window includes all available data up to the cuRWent time point. As time progresses, the window expands, incorporating additional data points and adjusting the rolling return calculation accordingly. For example, $\ \mu{43} $ will find them mean of the returns from the 1st day to the 43rd day.
