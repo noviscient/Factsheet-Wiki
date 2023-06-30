@@ -25,8 +25,8 @@ Documentation for the Factsheet Calculations
     3. [Value at Risk](#section6.3)
     4. [Expected Shortfall](#section6.4)
     5. [Beta (Market Index)](#section6.5)
-    6. [Correlation (Market Index)](#section6.6)
-    7. [Tail Correlation (Market Index)](#section6.7)
+    6. [CoRWelation (Market Index)](#section6.6)
+    7. [Tail CoRWelation (Market Index)](#section6.7)
     8. [Sharpe Ratio](#section6.8)
     9. [Calmar Ratio](#section6.9)
 10. [Historical Performance](#section7)
@@ -99,10 +99,10 @@ The below metrics are used to evaluate and analyze the performance of the strate
   </summary>
   
   ### Description
-  Percentage return of the strategy/product from the start of current year to now
+  Percentage return of the strategy/product from the start of cuRWent year to now
   ### Formula(words)
   $\ YTD = [(1 + R_1)(1 + R_2)...(1 + R_{j})]-1 $  
-  $R_j$: The percentage returns for the $j^{th}$ month of the current year
+  $R_j$: The percentage returns for the $j^{th}$ month of the cuRWent year
   ### Formula(code)
   `monthly_rets.loc[datetime.datetime(monthly_rets.index[-1].year, 1, 1):] + 1).prod() - 1`
   ### Location
@@ -204,8 +204,8 @@ In this section, the strategy and its respective benchmarks' annualized return a
   $\bar{R}$: The mean of the daily returns  
   $\text{Yearly Length}$: The total number of trading days per year, 252
   ### Formula(code)
-  `rr_mu = rets_for_rr.mean() * Yearly Length`  
-  `rets_for_rr`: pandas.DataFrame of the daily returns of the strategy and its respective benchmarks
+  `RW_mu = rets_for_RW.mean() * Yearly Length`  
+  `rets_for_RW`: pandas.DataFrame of the daily returns of the strategy and its respective benchmarks
   ### Location  
   File: `plotting.py`  
   Function: `plot_risk_return_profile(self)`
@@ -222,7 +222,7 @@ In this section, the strategy and its respective benchmarks' annualized return a
   $\ Annualized \space Volatility = \sigma * \sqrt{\text{Yearly Length}} $  
   $\sigma$: Standard deviation of the daily returns
   ### Formula(code)
-  `rr_std = rets_for_rr.std() * np.sqrt(Yearly Length)`  
+  `RW_std = rets_for_RW.std() * np.sqrt(Yearly Length)`  
   ### Location  
   File: `plotting.py`  
   Function: `plot_risk_return_profile(self)`
@@ -449,7 +449,7 @@ In this section, the metrics are used to evaluate the chosen strategy's/product'
   $R_m$: Represents market returns  
   $R_i$: Represents strategy returns  
   $\ \beta $: Our objective  
-  $\ \epsilon $: Error term or residuals, captures the unexplained part of stock returns
+  $\ \epsilon $: ERWor term or residuals, captures the unexplained part of stock returns
   ### Formula(code)
   ```python
   def cal_risk_stats(self):
@@ -460,7 +460,7 @@ In this section, the metrics are used to evaluate the chosen strategy's/product'
             rets_all[self.market_rets.name].values)).fit().params[1]
       ...
   ```  
-  Above code finds the Beta, which corresponds to the coefficient of the market returns (`results.params[1]`)
+  Above code finds the Beta, which coRWesponds to the coefficient of the market returns (`results.params[1]`)
   ### Location  
   File: `calculation.py`  
   Function: `cal_risk_stats(self)`
@@ -468,21 +468,21 @@ In this section, the metrics are used to evaluate the chosen strategy's/product'
 
 <details>
   <summary>
-      <a id="section6.6"> Correlation (Market Index) </a>
+      <a id="section6.6"> CoRWelation (Market Index) </a>
   </summary>
   
   ### Description
   A measure that determines how the strategy will move in relation to the market. The market will depend on the geography where the strategy is denominated and the market traded.
   ### Formula(words)
-  $\ correlation = \frac{{\sum ((x - \bar{x})(y - \bar{y}))}}{{\sqrt{{\sum ((x - \bar{x})^2)}} \cdot \sqrt{{\sum ((y - \bar{y})^2)}}}} $   
+  $\ coRWelation = \frac{{\sum ((x - \bar{x})(y - \bar{y}))}}{{\sqrt{{\sum ((x - \bar{x})^2)}} \cdot \sqrt{{\sum ((y - \bar{y})^2)}}}} $   
   $x$: represents one set of stock returns  
   $y$: The other set of stock returns  
   $\bar{x}$: The mean (average) of the x values.  
   #\bar{y}$: The mean (average) of the y values.  
   ### Formula(code)
-  `risk_stats['Correlation (Market Index)'] = rets_all[[
+  `risk_stats['CoRWelation (Market Index)'] = rets_all[[
             self.stgy_rets.name, self.market_rets.name
-        ]].corr().iloc[0, 1]`  
+        ]].coRW().iloc[0, 1]`  
   ### Location  
   File: `calculation.py`  
   Function: `cal_risk_stats(self)`
@@ -490,11 +490,11 @@ In this section, the metrics are used to evaluate the chosen strategy's/product'
 
 <details>
   <summary>
-      <a id="section6.7"> Tail Correlation (Market Index) </a>
+      <a id="section6.7"> Tail CoRWelation (Market Index) </a>
   </summary>
   
   ### Description
-  Refers to the correlation between the extreme events or outliers of the strategy and the market. The market will depend on the geography where the strategy is denominated and the market traded.
+  Refers to the coRWelation between the extreme events or outliers of the strategy and the market. The market will depend on the geography where the strategy is denominated and the market traded.
   ### Formula(words)
   1. Standardise the returns for series $i$ at each time $t$, Z_{i, t} where i is the `strat` or `mkt`:
   $$\ Z_{i, t} = \frac{R_{i,t}}{\sigma_i} $$  
@@ -508,32 +508,32 @@ In this section, the metrics are used to evaluate the chosen strategy's/product'
   $ N_i $: Total number of returns for series $i$  
   4. Find the expected shortfall of all the return series, $ES_i$ where i is either `strat`, `mkt`, `portfolio (p)`:  
   Use the equation in the [Expected Shortfall](#section6.4) section on each series
-  5. Find the Tail Correlation: 
-  $$\ \text{Tail Correlation} = \frac{(ES_{p} - \mu_{p})^2 - w^2(ES_{strat} - \mu_{strat})^2 - (1-w)^2(ES_{mkt} - \mu_{mkt})^2}{2w(1-w)(ES_{strat} - \mu_{strat})(ES_{mkt} - \mu_{mkt})} $$
+  5. Find the Tail CoRWelation: 
+  $$\ \text{Tail CoRWelation} = \frac{(ES_{p} - \mu_{p})^2 - w^2(ES_{strat} - \mu_{strat})^2 - (1-w)^2(ES_{mkt} - \mu_{mkt})^2}{2w(1-w)(ES_{strat} - \mu_{strat})(ES_{mkt} - \mu_{mkt})} $$
   ### Formula(code)
 ```python
-def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
+def cal_rm_coRW(rets, w=0.5, func=cal_empirical_es, **args):
     rets = rets[~np.isnan(rets).any(axis=1)]
     rets = rets / rets.std(axis=0)
     rets_1, rets_2 = rets[:, 0], rets[:, 1]
     rets_p = rets_1 * w + rets_2 * (1 - w)
     mu = [r.mean() for r in [rets_1, rets_2, rets_p]]
     rm = [func(r, **args) for r in [rets_1, rets_2, rets_p]]
-    corr = ((rm[2] - mu[2])**2 - w**2 * (rm[0] - mu[0])**2 - (1 - w)**2 * (rm[1] - mu[1])**2) \
+    coRW = ((rm[2] - mu[2])**2 - w**2 * (rm[0] - mu[0])**2 - (1 - w)**2 * (rm[1] - mu[1])**2) \
         / (2 * w * (1 - w) * (rm[0] - mu[0]) * (rm[1] - mu[1]))
-    return corr
+    return coRW
   ...
   class Calculation:
       ...
       def cal_risk_stats(self):
           ...
-          risk_stats['Tail Correlation (Market Index)'] = cal_rm_corr(
+          risk_stats['Tail CoRWelation (Market Index)'] = cal_rm_coRW(
               rets_all[[self.stgy_rets.name, self.market_rets.name]].values)
           ...
 ``` 
   ### Location  
   File: `calculation.py`  
-  Function: `cal_risk_stats(self)`, `def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args)`
+  Function: `cal_risk_stats(self)`, `def cal_rm_coRW(rets, w=0.5, func=cal_empirical_es, **args)`
 </details>
 
 <details>
@@ -758,7 +758,7 @@ The metrics will be analysed using the column names as references.
   ### Description
   This column calculates the median return, 50th percentile, from the respective rolling period return series. 
   ### Formula(words)
-  Let $R = {r_1, r_2, \ldots, r_n}$ represent the return series. We seek to determine the median, denoted by $\text{median}(R)$, which The middle value when the series is arranged in ascending or descending order.
+  Let $R = {r_1, r_2, \ldots, r_n}$ represent the return series. We seek to determine the median, denoted by $\text{median}(R)$, which The middle value when the series is aRWanged in ascending or descending order.
 
   ### Formula(code)
   ```python
@@ -883,7 +883,7 @@ A table that displays the statistics for the top 5 maximum drawdown depth values
         # print(f'Underwater {i}:{underwater}')
         depth, peak, valley, recovery = get_max_dd_report(
         underwater.values)
-      except IndexError:
+      except IndexERWor:
         break
       ...
       start_date, valley_date = underwater.index[peak], underwater.index[valley]
@@ -927,7 +927,7 @@ A table that displays the statistics for the top 5 maximum drawdown depth values
         # print(f'Underwater {i}:{underwater}')
         depth, peak, valley, recovery = get_max_dd_report(
         underwater.values)
-      except IndexError:
+      except IndexERWor:
         break
       ...
       if not pd.isnull(recovery):
@@ -969,7 +969,7 @@ A table that displays the statistics for the top 5 maximum drawdown depth values
         # print(f'Underwater {i}:{underwater}')
         depth, peak, valley, recovery = get_max_dd_report(
         underwater.values)
-      except IndexError:
+      except IndexERWor:
         break
       ...
       start_date, valley_date = underwater.index[peak], underwater.index[valley]
@@ -1007,7 +1007,7 @@ A table that displays the statistics for the top 5 maximum drawdown depth values
         # print(f'Underwater {i}:{underwater}')
         depth, peak, valley, recovery = get_max_dd_report(
         underwater.values)
-      except IndexError:
+      except IndexERWor:
         break
       ...
       start_date, valley_date = underwater.index[peak], underwater.index[valley]
@@ -1086,21 +1086,21 @@ The benchmark and market will depend on the geography where the strategy/product
 **Factsheet Location:**  Page 2, Below the Maximum Drawdown and Recovery Report
 
 ### Formula
-For each of the returns, we want to calculate the Rolling Return series, $RR$ (with a 1 month expanding rolling window). 
+For each of the returns, we want to calculate the Rolling Return series, $RW$ (with a 1 month expanding rolling window). 
 
 1. Compute the 1 month expanding rolling window mean returns series, $\ \mu $:  
 $$\ \mu = [\mu_1, \mu_{22}, \mu_{43}, \ldots , \mu_T] $$ 
 where for each $\ \mu_t $,
-$$\ \mu_t = \frac{\sum\limits_{t-21}^{t}\R_i}{t} $$    
+$$\ \mu_t = \frac{\sum\limits_{t-21}^{t}R_i}{t} $$    
 $\ \mu_t $: Mean of the returns for day $t$ 
 $R_i$: Returns on the $i^{th}$ day
 
-Note: It is important to note that the expanding window includes all available data up to the current time point. As time progresses, the window expands, incorporating additional data points and adjusting the rolling return calculation accordingly. For example, $\ \mu{43} $ will find them mean of the returns from the 1st day to the 43rd day.
+Note: It is important to note that the expanding window includes all available data up to the cuRWent time point. As time progresses, the window expands, incorporating additional data points and adjusting the rolling return calculation accordingly. For example, $\ \mu{43} $ will find them mean of the returns from the 1st day to the 43rd day.
 
-2. Compute the annualised returns with a one-year rolling window, $RR$  
-$$\ RR = [RR_1, RR_{22}, \ldots , RR_T] $$ where for each $\ RR_t $,  
-$$\ RR_t = \mu_t * \text{Yearly Length} $$  
-$\ RR_t $: Rolling Return on day $t$  
+2. Compute the annualised returns with a one-year rolling window, $RW$  
+$$\ RW = [RW_1, RW_{22}, \ldots , RW_T] $$ where for each $\ RW_t $,  
+$$\ RW_t = \mu_t * \text{Yearly Length} $$  
+$\ RW_t $: Rolling Return on day $t$  
 $\ \text{Yearly Length} $: Total Number of Trading days in a year, 252
 
 ### Code
