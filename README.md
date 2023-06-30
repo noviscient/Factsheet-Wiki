@@ -1080,8 +1080,8 @@ Function: `plot_underwater(self)`
 ## Rolling Return <a id="section12"></a>
 **Description**:  
 A line graph of the strategy's/product's annualised return with a one year rolling window (252 trading days) and one month frequency (21 trading days) against its benchmark and market returns.  
-The benchmark and market will depend on the geography where the strategy/product is denominated and the market traded.
-
+The benchmark and market will depend on the geography where the strategy/product is denominated and the market traded.  
+<img width="351" alt="image" src="https://github.com/noviscient/Factsheet-Wiki/assets/114644478/f444a5ba-dc24-4ea1-bfee-7a4b700efb84">  
 **Factsheet Location:**  Page 2, Below the Maximum Drawdown and Recovery Report
 
 ### Formula
