@@ -51,19 +51,20 @@ This section details the definition, formulas and code used for each metric in t
 1. $N$: The total number of months the strategy has been active
 2. $R_n$: The percentage returns of the strategy for the $n^{th}$ month
 3. `monthly_rets`: pd.Series type which represents all the months and its respective returns for each month
+
 ## Performance Metrics <a id="section2"></a>
 **Description:**
-The below metrics are used to evaluate and analyze the performance of the strategy over a specific period of time  
+The below metrics are used to evaluate and analyze the performance of the strategy/product over a specific period of time  
 **Diagram:**  
 ![image](https://github.com/gabrielyong4/Analytics-Project/assets/114644478/cfabcee2-7fee-4b29-94bc-5af895aa99a0)  
-**Location within Factsheet**: Page 1, top left hand side
+**Factsheet Location**: Page 1, top left hand side
 <details>
   <summary>
       <a id="section2.1"> 1 Yr </a>
   </summary>
     
   ### Description
-  Percentage return from the past 12 months  
+  Percentage return of the strategy/product over the last 6 months  
   ### Formula(words)
   $\ \text{1 Yr} = [(1 + R_{N})(1 + R_{N-1})...(1 + R_{N-11})]-1 $  
   ### Formula(code)
@@ -79,7 +80,7 @@ The below metrics are used to evaluate and analyze the performance of the strate
   </summary>
   
   ### Description
-  Percentage return since the inception date
+  Percentage return of the strategy/product since the inception date
   ### Formula(words)
   $\ Since \space Inception = [(1 + R_1)(1 + R_2)...(1 + R_{N})]-1$  
   $R_i$: The percentage returns for the $i^{th}$ month
@@ -96,7 +97,7 @@ The below metrics are used to evaluate and analyze the performance of the strate
   </summary>
   
   ### Description
-  Percentage return from the start of current year to now
+  Percentage return of the strategy/product from the start of current year to now
   ### Formula(words)
   $\ YTD = [(1 + R_1)(1 + R_2)...(1 + R_{j})]-1 $  
   $R_j$: The percentage returns for the $j^{th}$ month of the current year
@@ -132,7 +133,7 @@ In this section, the given strategy's monthly performance is compared against ce
 - Table showing the performance metrics(3M, YTD, 1 Yr, 3 Yr, Since January 2017) for the strategy and its benchmarks
 ![image](https://github.com/gabrielyong4/Analytics-Project/assets/114644478/8236cbd1-dcf2-4464-899a-628988d3cc74)
 
-**Location within Factsheet**: Page 1, top right side  
+**Factsheet Location**: Page 1, top right side  
 
 <details>
   <summary> 
@@ -140,7 +141,7 @@ In this section, the given strategy's monthly performance is compared against ce
   </summary>
   
   ### Description
-  A graph that shows the monthly performance of the fund against its respective benchmarks
+  A graph that shows the monthly performance of the strategy/product against its respective benchmarks
   ### Graph Plot Location
   File: `plotting.py`  
   Function: `plot_cum_rets()`  
@@ -155,7 +156,7 @@ In this section, the given strategy's monthly performance is compared against ce
   </summary>
   
   ### Description
-  Percentage return for the last 3 months
+  Percentage return of the strategy/product for the last 3 months
   ### Formula(words)
   $\ 3M = [(1 + R_{N-2})(1 + R_{N-1})(1 + R_{N})\]-1$
   ### Formula(code)
@@ -171,7 +172,7 @@ In this section, the given strategy's monthly performance is compared against ce
   </summary>
   
   ### Description
-  Percentage return from the past 36 months  
+  Percentage return of the strategy/product from the last 36 months  
   ### Formula(words)
   $\ 1 \space Yr = [(1 + R_{N})(1 + R_{N-1})...(1 + R_{N-35})\]-1$ 
   ### Formula(code)
@@ -187,7 +188,7 @@ In this section, the given strategy's monthly performance is compared against ce
 **Description**:  
 In this section, the strategy and its respective benchmarks' annualized return and volatility will be reflected on the graph
 ![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/f287af28-c961-4896-a6a4-b4302b9c8d42)  
-**Location within Factsheet**: Page 1, top left hand side
+**Factsheet Location**: Page 1, top left hand side
 
 <details>
   <summary>
@@ -237,7 +238,7 @@ In this section, the metrics are used to evaluate the returns from the chosen st
   </summary>
   
   ### Description
-  Percentage return for the last 6 months
+  Measures the percentage return of the fund over the last 6 months. 
   ### Formula(words)
   $\ 6 \space Month \space ROR = [(1 + R_{N})(1 + R_{N-1})...(1 + R_{N-5})\]-1$ 
   ### Formula(code)
@@ -271,10 +272,10 @@ In this section, the metrics are used to evaluate the returns from the chosen st
   </summary>
   
   ### Description
-  Average of the strategy's positive returns (returns > 0)
+  Average of all of the strategy's positive returns (returns > 0)
   ### Formula(words)
-  $\ Average \space Winning \space Month = \frac{R_1 + R_2 + ... + R_W}{W}  $  
-  $R_w$: The positive returns for month $w$
+  $\ Average \space Winning \space Month = \frac{R_1 + R_2 + ... + R_W}{\text{Total No. of Positive Returns}}  $  
+  $R_w$: The positive return for month $w$
   ### Formula(code)
   `rets_stats['Average Winning Month'] = self.stgy_mrets[self.stgy_mrets > 0].mean()`  
   ### Location  
@@ -288,9 +289,9 @@ In this section, the metrics are used to evaluate the returns from the chosen st
   </summary>
   
   ### Description
-  Average of the strategy's negative returns (returns < 0)
+  Average of the all the strategy's negative returns (returns < 0)
   ### Formula(words)
-  $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{W} $   
+  $\ Average \space Losing \space Month = \frac{R_1 + R_2 + ... + R_W}{\text{Total No. of Negative Returns}} $   
   $R_w$: The negative returns for month $w$
   ### Formula(code)
   `rets_stats['Average Losing Month'] = self.stgy_mrets[self.stgy_mrets < 0].mean()`  
@@ -299,14 +300,14 @@ In this section, the metrics are used to evaluate the returns from the chosen st
   Function: `cal_return_stats(self)`
 </details>
 
-**Note:** [CAGR](#section2.4), [1 Year ROR (1 Yr)](#section2.1), [Year To Date ROR (YTD)](#section2.3), [Total Return (Since Inception)](#section2.2), [3 Month ROR (3M)](#section3.2) and the [3 year ROR (3 Yr)](#section3.3) are already defined in the above sections 
+**Note:** [CAGR](#section2.4), [1 Year ROR (1 Yr)](#section2.1), [Year To Date ROR (YTD)](#section2.3), [Total Return (Since Inception)](#section2.2), [3 Month ROR (3M)](#section3.2) and [3 year ROR (3 Yr)](#section3.3) are already defined in the above sections 
 
 
 ## Risk Statistics (Annualized) <a id="section6"></a>
 **Description**:  
-In this section, the metrics are used to evaluate the risks from the chosen strategy  
+In this section, the metrics are used to evaluate the chosen strategy's/product's risk
 ![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/5e3adf8a-d5e3-412f-99b5-31d4f18537de)  
-**Location within Factsheet:**  Page 1, Next to the Return Statistics section
+**Factsheet Location:**  Page 1, Next to the Return Statistics section
 
 <details>
   <summary>
@@ -314,7 +315,7 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   </summary>
   
   ### Description
-  Measure of downside risk that focuses on returns that fall below the risk-free benchmark. The risk-free benchmark will depend on the geography where the strategy is denominated and the market traded. For US and Global strategies we will be using the 13 week Treasury Bill rate. 
+  Measure of downside risk that focuses on returns that fall below the risk-free benchmark. The risk-free benchmark will depend on the geography where the strategy/product is denominated and the market traded. For US and Global strategies/products, we will be using the 13 week Treasury Bill rate. 
   ### Formula(words) 
   $$\ Annualised \space Downside \space Volatility = \sqrt{\frac{\sum\limits_{t=1}^{n} [min(R_{st} - R_{ft}, 0)]^2}{n}} - \sqrt{No. \space of \space Trading \space Days \space per \space year}$$
   $n$: Total Number of Returns  
@@ -379,7 +380,7 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   ### Formula(words)
   $\ \text{Value at Risk} = Q(\alpha, \text{rets}) $  
   $\ \alpha$: The significance level  
-  $rets$: Represents all the returns in the strategy  
+  $rets$: All the returns in the strategy  
   $Q$: Finds the quantile based on the significance level and the returns in the strategy
   ### Formula(code)
   ```python
@@ -469,7 +470,7 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   </summary>
   
   ### Description
-  A measure that determines how the strategy will move in relation to the market. The market will depend on the geography where the strategy is denominated and the market traded
+  A measure that determines how the strategy will move in relation to the market. The market will depend on the geography where the strategy is denominated and the market traded.
   ### Formula(words)
   $\ correlation = \frac{{\sum ((x - \bar{x})(y - \bar{y}))}}{{\sqrt{{\sum ((x - \bar{x})^2)}} \cdot \sqrt{{\sum ((y - \bar{y})^2)}}}} $   
   $x$: represents one set of stock returns  
@@ -491,7 +492,7 @@ In this section, the metrics are used to evaluate the risks from the chosen stra
   </summary>
   
   ### Description
-  Refers to the correlation between the extreme events or outliers of the strategy and the market. The market will depend on the geography where the strategy is denominated and the market traded
+  Refers to the correlation between the extreme events or outliers of the strategy and the market. The market will depend on the geography where the strategy is denominated and the market traded.
   ### Formula(words)
   1. Standardise the returns for series $i$ at each time $t$, Z_{i, t} where i is the `strat` or `mkt`:
   $$\ Z_{i, t} = \frac{R_{i,t}}{\sigma_i} $$  
@@ -539,7 +540,7 @@ def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
   </summary>
   
   ### Description
-  Measure of an investment's risk-adjusted performance, calculated by comparing its return to that of a risk-free benchmark. The risk-free benchmark will depend on the geography where the strategy is denominated and the market traded. For US and Global strategies we will be using the 13 week Treasury Bill rate.
+  Measure of the strategy's/product's risk-adjusted performance, calculated by comparing its return to that of a risk-free benchmark. The risk-free benchmark will depend on the geography where the strategy is denominated and the market traded. For US and Global strategies we will be using the 13 week Treasury Bill rate.
 
   ### Formula(words)
   1. Find the excess returns at each time $t$, $R_{excess, t}$:  
@@ -598,7 +599,7 @@ def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
 **Description**:  
 The past performance of the strategy  
 ![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/742c88ed-172f-48ef-b767-771b9817d539)  
-**Location within Factsheet:**  Page 1, Bottom of the page  
+**Factsheet Location:**  Page 1, Bottom of the page  
 
 ### Formula(words)
 Converting the daily returns into monthly returns for each month $m$, $R_m$:
@@ -624,11 +625,11 @@ def format_table(self, version):
 
 ## Return Report <a id="section8"></a>
 **Description**:  
-The past performance of the strategy based on the rolling period the returns have been calculated on. It will also describe the returns by displaying the best, worst, average, median and last returns for each different period.  
+The past performance of the strategy/product based on the rolling period the returns have been calculated on. It will also describe the returns by displaying the best, worst, average, median and last returns for each different period.  
 
 The metrics will be analysed using the column names as references.  
 ![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/5ca953c4-3aa6-46ac-a91a-29e875cedb76)  
-**Location within Factsheet:**  Page 2, top left of the page  
+**Factsheet Location:**  Page 2, top left of the page  
 
 <details>
   <summary>
@@ -800,8 +801,14 @@ The metrics will be analysed using the column names as references.
 
 ## Distribution of Monthly Returns <a id="section9"></a>
 **Description**:  
+A histogram that shows the distribution of the strategy's/product's monthly returns against its market returns
 
-**Location:**  Page 2, Top right hand side
+**Factsheet Location:**  Page 2, Top right hand side
+
+### Location
+File: `plotting.py`  
+Function: `plot_dist_mrets(self)`
+
 
 ## Maximum Drawdown and Recovery <a id="section10"></a>
 **Description**:  
@@ -1011,3 +1018,40 @@ A table that displays the statistics for the top 5 maximum drawdown depth values
   File: `calculation.py`  
   Function: `cal_drawdown_report(self)`
 </details>
+
+## Daily Drawdown <a id="section11"></a>
+**Description**:  
+A line graph that displays the daily drawdown of the strategy/product against its respective benchmark and market. The benchmark and market will depend on the geography where the strategy/product is denominated and the market traded.
+
+**Factsheet Location:**  Page 2, Right side of the Maximum Drawdown and Recovery Report
+
+### Code
+In the `calculation.py` file, where the daily drawdown for all the returns are calculated:
+```python
+def cal_underwater(rets):
+
+    cum_rets = (rets + 1).cumprod()
+    underwater = cum_rets / np.maximum.accumulate(cum_rets) - 1
+
+    return underwater
+
+class Calculation:
+  ...
+  def cal_underwater_all(self):
+    rets_all = self.rets_all[[
+        self.stgy_rets.name, self.benchmark_rets.name,
+        self.market_rets.name
+    ]].copy()
+    # rets_all = (rets_all + 1).groupby(pd.Grouper(freq='M')).prod() - 1
+    self.underwater = rets_all.apply(cal_underwater)
+```
+
+In the `plotting.py` file where the graph is plotted:
+```python
+def plot_underwater(self):
+  ...
+```
+
+### Code Location
+File: `calculation.py`,`plotting.py`  
+Function: `cal_underwater`, `cal_underwater`, `plot_underwater(self)`
