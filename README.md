@@ -478,7 +478,7 @@ In this section, the metrics are used to evaluate the chosen strategy's/product'
   $x$: represents one set of stock returns  
   $y$: The other set of stock returns  
   $\bar{x}$: The mean (average) of the x values.  
-  #\bar{y}$: The mean (average) of the y values.  
+  $\bar{y}$: The mean (average) of the y values.  
   ### Formula(code)
   `risk_stats['Correlation (Market Index)'] = rets_all[[
             self.stgy_rets.name, self.market_rets.name
@@ -496,7 +496,7 @@ In this section, the metrics are used to evaluate the chosen strategy's/product'
   ### Description
   Refers to the correlation between the extreme events or outliers of the strategy and the market. The market will depend on the geography where the strategy is denominated and the market traded.
   ### Formula(words)
-  1. Standardise the returns for series $i$ at each time $t$, $Z_{i, t}$ where i is the `strat` or `mkt`:
+  1. Standardise the returns for series $i$ at each time $t$ , $Z_{i, t}$ where i is the `strat` or `mkt`:
   $$\ Z_{i, t} = \frac{R_{i,t}}{\sigma_i} $$  
   $R_{i, t}$: The returns of series $i$ at time $t$  
   $\ \sigma_i $: The standard deviation of series $i$  
