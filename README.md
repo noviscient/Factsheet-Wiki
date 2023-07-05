@@ -57,7 +57,6 @@ This section details the definition, formulas and code used for each metric in t
 ## Performance Metrics <a id="section2"></a>
 **Description:**
 The below metrics are used to evaluate and analyze the performance of the strategy/product over a specific period of time  
-**Diagram:**  
 ![image](https://github.com/gabrielyong4/Analytics-Project/assets/114644478/cfabcee2-7fee-4b29-94bc-5af895aa99a0)  
 **Factsheet Location**: Page 1, top left hand side
 <details>
@@ -307,7 +306,7 @@ In this section, the metrics are used to evaluate the returns from the chosen st
 
 ## Risk Statistics (Annualized) <a id="section6"></a>
 **Description**:  
-In this section, the metrics are used to evaluate the chosen strategy's/product's risk
+In this section, the metrics are used to evaluate the chosen strategy's/product's risk  
 ![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/5e3adf8a-d5e3-412f-99b5-31d4f18537de)  
 **Factsheet Location:**  Page 1, Next to the Return Statistics section
 
@@ -503,7 +502,7 @@ In this section, the metrics are used to evaluate the chosen strategy's/product'
   2. Find the weighted average portfolio return series at each time $t$, $Z_{p, t}$:  
   $$\ Z_{p, t} = Z_{strat, t}(w) + Z_{mkt, t}(1-w) $$  
   $w$: The weight assigned to the strategy
-  3. Find the mean of all the return series, $\ \mu_{i} $ where i is either `strat`, `mkt`, `portfolio (p)`:
+  3. Find the mean of all the return series, $\\mu_i$ , where i is either `strat`, `mkt`, `portfolio (p)`:
   $$\ \mu_i = \frac{\sum\limits_{t=1}^{N_i}R_{i,t}}{N_i} $$  
   $N_{i}$: Total number of returns for series $i$  
   4. Find the expected shortfall of all the return series, $ES_i$ where i is either `strat`, `mkt`, `portfolio (p)`:  
@@ -1023,7 +1022,8 @@ A table that displays the statistics for the top 5 maximum drawdown depth values
 
 ## Daily Drawdown <a id="section11"></a>
 **Description**:  
-A line graph that displays the daily drawdown of the strategy/product against its respective benchmark and market. The benchmark and market will depend on the geography where the strategy/product is denominated and the market traded.
+A line graph that displays the daily drawdown of the strategy/product against its respective benchmark and market. The benchmark and market will depend on the geography where the strategy/product is denominated and the market traded.  
+<img width="351" alt="image" src="https://github.com/noviscient/Factsheet-Wiki/assets/114644478/30cab903-116b-4395-aac3-8cc48cce6136">  
 
 **Factsheet Location:**  Page 2, Right side of the Maximum Drawdown and Recovery Report
 
@@ -1081,7 +1081,8 @@ Function: `plot_underrater(self)`
 ## Rolling Return <a id="section12"></a>
 **Description**:  
 A line graph of the strategy's/product's annualised return with 1 month expanding rolling window against its benchmark and market returns.  
-The benchmark and market will depend on the geography where the strategy/product is denominated and the market traded.
+The benchmark and market will depend on the geography where the strategy/product is denominated and the market traded.  
+<img width="356" alt="image" src="https://github.com/noviscient/Factsheet-Wiki/assets/114644478/1439e74a-b6e6-44d5-8426-dc03b7d9ad82">  
 
 **Factsheet Location:**  Page 2, Below the Maximum Drawdown and Recovery Report
 
