@@ -505,7 +505,7 @@ In this section, the metrics are used to evaluate the chosen strategy's/product'
   $w$: The weight assigned to the strategy
   3. Find the mean of all the return series, $\ \mu_{i} $ where i is either `strat`, `mkt`, `portfolio (p)`:
   $$\ \mu_i = \frac{\sum\limits_{t=1}^{N_i}R_{i,t}}{N_i} $$  
-  $ N_i $: Total number of returns for series $i$  
+  $N_{i}$: Total number of returns for series $i$  
   4. Find the expected shortfall of all the return series, $ES_i$ where i is either `strat`, `mkt`, `portfolio (p)`:  
   Use the equation in the [Expected Shortfall](#section6.4) section on each series
   5. Find the Tail Correlation: 
