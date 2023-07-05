@@ -188,7 +188,7 @@ In this section, the given strategy's monthly performance is compared against ce
 
 ## Risk Return Profile <a id="section4"></a>
 **Description**:  
-In this section, the strategy and its respective benchmarks' annualized return and volatility will be reflected on the graph
+In this section, the strategy and its respective benchmarks' annualized return and volatility will be reflected on the graph  
 ![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/f287af28-c961-4896-a6a4-b4302b9c8d42)  
 **Factsheet Location**: Page 1, top left hand side
 
@@ -319,7 +319,7 @@ In this section, the metrics are used to evaluate the chosen strategy's/product'
   ### Description
   Measure of downside risk that focuses on returns that fall below the risk-free benchmark. The risk-free benchmark will depend on the geography where the strategy/product is denominated and the market traded. For US and Global strategies/products, we will be using the 13 week Treasury Bill rate. 
   ### Formula(words) 
-  $$\ Annualised \space Downside \space Volatility = \sqrt{\frac{\sum\limits_{t=1}^{n} [min(R_{st} - R_{ft}, 0)]^2}{n}} - \sqrt{No. \space of \space Trading \space Days \space per \space year}$$
+  $$\ Annualised \space Downside \space Volatility = \sqrt{\frac{\sum\limits_{t=1}^{n} [min(R_{st} - R_{ft}, 0)]^2}{n}} * \sqrt{No. \space of \space Trading \space Days \space per \space year}$$
   $n$: Total Number of Returns  
   $min(X,Y)$: Minimum out of the 2 parameters. For the numerator we only want the negative excess returns  
   $R_{st}$: Strategy/Product Returns at time t  
@@ -378,7 +378,7 @@ In this section, the metrics are used to evaluate the chosen strategy's/product'
   </summary>
   
   ### Description
-  Measures the extent of possible financial losses within the strategy/product over a specific time frame given a certain significance level (alpha)
+  Measures the extent of possible financial losses within the strategy/product over a specific time frame given a certain significance level (alpha). For the VaR, we will using the monthly returns as the input and the alpha specified will be 0.05.
   ### Formula(words)
   $\ \text{Value at Risk} = Q(\alpha, \text{rets}) $  
   $\ \alpha$: The significance level  
