@@ -1151,7 +1151,7 @@ Function: `plot_rolling_rets(self)`
 **Description**:  
 A line graph of the strategy's/product's annualised return with 1 month expanding rolling window against its benchmark and market returns.  
 The benchmark and market will depend on the geography where the strategy/product is denominated and the market traded.  
-
+<img width="356" alt="image" src="https://github.com/noviscient/Factsheet-Wiki/assets/114644478/ab255465-5ade-4cac-ab15-8bdf3be4a428">  
 **Factsheet Location:**  Page 2, Right side of the Rolling Return section
 
 ### Formula
