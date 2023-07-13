@@ -1149,19 +1149,83 @@ Function: `plot_rolling_rets(self)`
 
 ## Rolling Volatility <a id="section13"></a>
 **Description**:  
+A line graph of the strategy's/product's annualised return with 1 month expanding rolling window against its benchmark and market returns.  
+The benchmark and market will depend on the geography where the strategy/product is denominated and the market traded.  
 
 **Factsheet Location:**  Page 2, Right side of the Rolling Return section
 
 ### Formula
+1. Given the scale, frequency and halflife of the strategy/product, find the decay weight series, $D$:  
+  i. We will first create a series of values from 0 to the frequency value, $S1$:  
+  If the frequency = 31, $S1 = [0,1,2,\ldots,31]$  
+  
+  ii. To get $S2$:  
+  $$ S2_i = 0.5^{\frac{1}{halflife}}*S1_i$$  
+  where $i$ is the value in the index of the each respective series  
+
+  iii. To get the Decay Weights Series, $D$:  
+  where for each $D_i$,
+  $$D_i = \frac{S2_i}{\sum\limits_{i=1}^{frequency}S2_i}$$  
+  then reverse the series to get $D$  
+2. For each of the returns, we want to calculate the 1 month expanding rolling window volatility Series, $V$:  
+$$\ V = [V_1, V_{22}, V_{43}, \ldots , V_T] $$  
+where for each $V_t$,
+$$ V_t = \sqrt{\sum\limits_{i=1}^{t}(R_i - \bar{R_t})^2 * D_i * scale} $$  
+$R_i$: Returns on $i^{th}$ day  
+$\ \bar{R_t}$: The mean of the returns from day 1 to day t  
+$D_i$: The Decay Weight for the $i^{th}$ index  
+$scale$: Usually 12
 
 
 ### Code
+In the `calculation.py` file, the rolling volatility is calculated in cal_rolling_vols(self) function
+```python
+def cal_decay_weights(wds, halflife):
 
+    decay_weights = (0.5**(1 / halflife))**np.arange(wds)
+    decay_weights = decay_weights / decay_weights.sum()
+    decay_weights = decay_weights[::-1]
+
+    return decay_weights
+
+...
+
+def cal_rolling_vols(self):
+  # Specifying the halflife, frequency and scale of the strategy/product
+  if self.freq == 'daily':
+      halflife, freq, scale = MONTH_LENGTH, MONTH_LENGTH, YEARLY_LENGTH
+  else:
+      halflife, freq, scale = 3, 1, 12
+
+  # Getting the return series for the strategy/product and its benchmark and market return
+  rets_for_vol = self.rets_all[[
+      self.stgy_rets.name, self.benchmark_rets.name,
+      self.market_rets.name
+  ]]
+  vols_all = {}
+  for col in rets_for_vol:
+      rets = rets_for_vol[col]
+      vols = pd.Series()
+      for i in range(0, len(rets), freq):
+          sub_rets = rets.iloc[:i + 1]
+          date = sub_rets.index[-1]
+          weights = cal_decay_weights(len(sub_rets), halflife)
+          vol = np.sqrt(
+              ((sub_rets - sub_rets.mean())**2 * weights).sum() * scale)
+          vols.loc[date] = vol
+      vols_all[col] = vols
+  self.vols_all = pd.DataFrame(vols_all).dropna(how='all')
+```
+In the `plotting.py` file, this is where the line graph is formatted and plotted
+```python
+def plot_rolling_vols(self):
+  ...
+```
 ### Code Location
 **Calculation**  
 File: `calculation.py`  
-Function: `cal_rolling_rets`
+Function: `cal_rolling_vols`, `cal_decay_weights`
 
 **Plotting**  
 File: `plotting.py`  
-Function: `plot_rolling_rets(self)`
+Function: `plot_rolling_vols(self)`
