@@ -1156,17 +1156,17 @@ The benchmark and market will depend on the geography where the strategy/product
 
 ### Formula
 1. Given the scale, frequency and halflife of the strategy/product, find the decay weight series, $D$:  
-  1. We will first create a series of values from 0 to the frequency value, $S1$:  
-  If the frequency = 31, $S1 = [0,1,2,\ldots,31]$  
+    1. We will first create a series of values from 0 to the frequency value, $S1$:  
+    If the frequency = 31, $S1 = [0,1,2,\ldots,31]$  
   
-  2. To get $S2$:  
-  $$ S2_i = 0.5^{\frac{1}{halflife}}*S1_i$$  
-  where $i$ is the value in the index of the each respective series  
+    2. To get $S2$:  
+    $$ S2_i = 0.5^{\frac{1}{halflife}}*S1_i$$  
+    where $i$ is the value in the index of the each respective series  
 
-  3. To get the Decay Weights Series, $D$:  
-  where for each $D_i$,
-  $$D_i = \frac{S2_i}{\sum\limits_{i=1}^{frequency}S2_i}$$  
-  then reverse the series to get $D$  
+    3. To get the Decay Weights Series, $D$:  
+    where for each $D_i$,
+    $$D_i = \frac{S2_i}{\sum\limits_{i=1}^{frequency}S2_i}$$  
+    then reverse the series to get $D$  
 2. For each of the returns, we want to calculate the 1 month expanding rolling window volatility Series, $V$:  
 $$\ V = [V_1, V_{22}, V_{43}, \ldots , V_T] $$  
 where for each $V_t$,
