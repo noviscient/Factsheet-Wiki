@@ -1160,7 +1160,7 @@ The benchmark and market will depend on the geography where the strategy/product
     If the frequency = 31, $S1 = [0,1,2,\ldots,31]$  
   
     2. To get $S2$:  
-    $$ S2_i = 0.5^{\frac{1}{halflife}}*S1_i$$  
+    $$ S2_i = 0.5^{\frac{1}{halflife}}*S1_i $$  
     where $i$ is the value in the index of the each respective series  
 
     3. To get the Decay Weights Series, $D$:  
