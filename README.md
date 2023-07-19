@@ -46,6 +46,7 @@ Documentation for the Factsheet Calculations
 14. [Daily Drawdown](#section11)
 15. [Rolling Return](#section12)
 16. [Rolling Volatility](#section13)
+17. [Worst Months](#section14)
 
 
 ## Introduction <a id="section1"></a>
@@ -1149,8 +1150,9 @@ Function: `plot_rolling_rets(self)`
 
 ## Rolling Volatility <a id="section13"></a>
 **Description**:  
-A line graph of the strategy's/product's annualised return with 1 month expanding rolling window against its benchmark and market returns.  
+A line graph of the strategy's/product's exponentially weighted volatility(EWM) with a one calendar month halflife and a one month expanding rolling window against its benchmark and market returns.  
 The benchmark and market will depend on the geography where the strategy/product is denominated and the market traded.  
+The average EWM volatility is also included in the graph as the dotted line.  
 <img width="356" alt="image" src="https://github.com/noviscient/Factsheet-Wiki/assets/114644478/ab255465-5ade-4cac-ab15-8bdf3be4a428">  
 **Factsheet Location:**  Page 2, Right side of the Rolling Return section
 
@@ -1167,7 +1169,7 @@ The benchmark and market will depend on the geography where the strategy/product
     where for each $D_i$,
     $$D_i = \frac{S2_i}{\sum\limits_{i=1}^{frequency}S2_i}$$  
     then reverse the series to get $D$  
-2. For each of the returns, we want to calculate the 1 month expanding rolling window volatility Series, $V$:  
+2. For each of the returns, we want to calculate the EWM Series, $V$:  
 $$\ V = [V_1, V_{22}, V_{43}, \ldots , V_T] $$  
 where for each $V_t$,
 $$ V_t = \sqrt{\sum\limits_{i=1}^{t}(R_i - \bar{R_t})^2 * D_i * scale} $$  
@@ -1229,3 +1231,44 @@ Function: `cal_rolling_vols`, `cal_decay_weights`
 **Plotting**  
 File: `plotting.py`  
 Function: `plot_rolling_vols(self)`
+
+## Worst Months <a id="section14"></a>
+**Description**:  
+A grouped bar chart displaying the 5 worst performing months of the strategy/product compared against its benchmark and market returns.  
+The benchmark and market will depend on the geography where the strategy/product is denominated and the market traded.  
+
+### Formula
+1. For each month, the daily returns will be used to calculate the arithmetic returns to get the performance for that respective month.
+$\ M_i = [(1 + R_1)(1 + R_2)...(1 + R_{j})]-1 $  
+$M_i$: Monthly returns for the $i^{th}$ month  
+$R_j$: Daily returns for the $j^{th}$ day  
+2. Then we rank the returns and plot the 5 worst performing returns
+
+### Code
+In the `calculation.py` file, the monthly returns are calculated and ranked is calculated `cal_worst_months` function
+```python
+def cal_worst_months(self):
+  rets_all = self.rets_all[[
+      self.stgy_rets.name, self.benchmark_rets.name,
+      self.market_rets.name
+  ]].fillna(0)
+  monthly_rets_all = (rets_all + 1).groupby(
+      pd.Grouper(freq='M')).prod() - 1
+
+  num_worst_months = 5
+  self.worst_months = monthly_rets_all.sort_values(
+      self.market_rets.name).head(num_worst_months)
+```
+In the `plotting.py` file, this is where the grouped bar chart graph is formatted and plotted
+```python
+def plot_worst_months(self):
+  ...
+```
+### Code Location
+**Calculation**  
+File: `calculation.py`  
+Function: `cal_worst_months`
+
+**Plotting**  
+File: `plotting.py`  
+Function: `plot_worst_months`
