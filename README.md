@@ -1236,9 +1236,10 @@ Function: `plot_rolling_vols(self)`
 **Description**:  
 A grouped bar chart displaying the 5 worst performing months of the strategy/product compared against its benchmark and market returns.  
 The benchmark and market will depend on the geography where the strategy/product is denominated and the market traded.  
+![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/5889cb43-fb38-4dd9-9a8f-09e6ff2bcc2a)  
 
 ### Formula
-1. For each month, the daily returns will be used to calculate the arithmetic returns to get the performance for that respective month.
+1. For each month, the daily returns will be used to calculate the arithmetic returns to get the performance for that respective month.  
 $\ M_i = [(1 + R_1)(1 + R_2)...(1 + R_{j})]-1 $  
 $M_i$: Monthly returns for the $i^{th}$ month  
 $R_j$: Daily returns for the $j^{th}$ day  
