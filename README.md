@@ -1277,10 +1277,11 @@ Function: `plot_worst_months`
 
 ## Tail Correlations <a id="section15"></a>
 **Description**:  
-Calculates and displays the tail correlations between the strategy/product and all of its benchmarks. Proper definition of Tail Correlation can be [here](#section6.7).
+Calculates and displays the tail correlations between the strategy/product and all of its benchmarks. Proper definition of Tail Correlation can be [here](#section6.7).  
+![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/17e05ac7-ff59-4d57-b08a-56557f6126f0)  
 
 ### Formula
-Calculation is same as the earlier [Tail Correlation (Market Index)](#section6.7) section. However, rather than using the market returns, $R_{mkt,t}$ we will be using the benchmark returns, $R_{bench,t}$. All calculations will also be done on the benchmark returns rather than the initial market, `mkt`, returns. 
+Calculation is same as the earlier [Tail Correlation (Market Index)](#section6.7) section. However, rather than using the market returns, $R_{mkt,t}$ we will be using the benchmark returns, $R_{bench,t}$. All calculations will also be done on the benchmark returns rather than the market returns.  
 
 ### Code
 In the `calculation.py` file, the tail correlations of the strategy and the respective benchmarks will be calculated using the `cal_tail_corr` and `cal_rm_corr` functions.
