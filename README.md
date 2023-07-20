@@ -1240,7 +1240,7 @@ The benchmark and market will depend on the geography where the strategy/product
 
 ### Formula
 1. For each month, the daily returns will be used to calculate the arithmetic returns to get the performance for that respective month.  
-$\ M_i = [(1 + R_1)(1 + R_2)...(1 + R_{j})]-1 $  
+$$\ M_i = [(1 + R_1)(1 + R_2)...(1 + R_{j})]-1 $$  
 $M_i$: Monthly returns for the $i^{th}$ month  
 $R_j$: Daily returns for the $j^{th}$ day  
 2. Then we rank the returns and plot the 5 worst performing returns
