@@ -47,6 +47,7 @@ Documentation for the Factsheet Calculations
 15. [Rolling Return](#section12)
 16. [Rolling Volatility](#section13)
 17. [Worst Months](#section14)
+18. [Tail Correlation](#section15)
 
 
 ## Introduction <a id="section1"></a>
@@ -1273,3 +1274,41 @@ Function: `cal_worst_months`
 **Plotting**  
 File: `plotting.py`  
 Function: `plot_worst_months`
+
+## Tail Correlations <a id="section15"></a>
+**Description**:  
+Calculates and displays the tail correlations between the strategy/product and all of its benchmarks. Proper definition of Tail Correlation can be [here](#section6.7).
+
+### Formula
+Calculation is same as the earlier [Tail Correlation (Market Index)](#section6.7) section. However, rather than using the market returns, $R_{mkt,t}$ we will be using the benchmark returns, $R_{bench,t}$. All calculations will also be done on the benchmark returns rather than the initial market, `mkt`, returns. 
+
+### Code
+In the `calculation.py` file, the tail correlations of the strategy and the respective benchmarks will be calculated using the `cal_tail_corr` and `cal_rm_corr` functions.
+```python
+def cal_rm_corr(rets, w=0.5, func=cal_empirical_es, **args):
+  ...
+  return corr
+...
+def cal_tail_corr(self):
+  rm_corrs = {}
+  for bench in self.bench_rets:
+      rets_pair = self.rets_all[[self.stgy_rets.name
+                                  ]].join(self.bench_rets[bench])
+      rm_corrs[bench] = cal_rm_corr(rets_pair.values)
+      print(rm_corrs[bench])
+  self.rm_corrs = pd.Series(rm_corrs).sort_values()
+```
+In the `plotting.py` file, this is where the horizontal bar chart will be plotted and formatted.
+```python
+def plot_tail_corr(self):
+  ...
+```
+
+### Code Location
+**Calculation**  
+File: `calculation.py`  
+Function: `cal_rm_corr`, `cal_tail_corr`
+
+**Plotting**  
+File: `plotting.py`  
+Function: `plot_tail_corr`
