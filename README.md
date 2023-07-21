@@ -48,6 +48,8 @@ Documentation for the Factsheet Calculations
 16. [Rolling Volatility](#section13)
 17. [Worst Months](#section14)
 18. [Tail Correlation](#section15)
+19. [Factor Exposures (Current)](#section16)
+20. [Factor Exposures (Rolling)](#section17)
 
 
 ## Introduction <a id="section1"></a>
@@ -1279,6 +1281,7 @@ Function: `plot_worst_months`
 **Description**:  
 Calculates and displays the tail correlations between the strategy/product and all of its benchmarks. Proper definition of Tail Correlation can be [here](#section6.7).  
 ![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/17e05ac7-ff59-4d57-b08a-56557f6126f0)  
+**Factsheet Location:**  Page 2, At the bottom right of the page
 
 ### Formula
 Calculation is same as the earlier [Tail Correlation (Market Index)](#section6.7) section. However, rather than using the market returns, $R_{mkt,t}$ we will be using the benchmark returns, $R_{bench,t}$. All calculations will also be done on the benchmark returns rather than the market returns.  
@@ -1313,3 +1316,95 @@ Function: `cal_rm_corr`, `cal_tail_corr`
 **Plotting**  
 File: `plotting.py`  
 Function: `plot_tail_corr`
+
+## Factor Exposures (Current) <a id="section16"></a>
+**Description**:  
+For this section and the following Factor Contribution sections, we will require two different datasets: Our strategy/product returns and the historical Fama French Factors.  
+The numbers in the graph indicate the contribution of each factor to the strategy/product's current overall return. 
+1. Market:  
+Risk associated with the general movement of the market
+2. Momentum:  
+Means the portfolio includes assets that have a historical of strong performance and continue to exhibit positive momentum.
+3. Value:  
+Measures the impact of investing in undervalued assets relative to their book value
+4. Size:  
+This factor captures the performance difference between small-cap and large-cap stocks, with a focus on smaller companies  
+These factors are important to gain insights into the underlying drivers of risk and return in their portfolios.  
+
+**Factsheet Location:**  Page 3, At the top left of the page
+
+### Formula
+1. Calculate the excess returns, $R_{excess}$:  
+$$ R_{excess} = R_{strat} - R_f $$  
+$R_{strat}$: Strategy Returns  
+$R_f$: Risk-Free Rate  
+
+2. Find the factor exposure by conducting linear regression on the Excess Returns ($R_{excess}$) to find the $\ \beta $ values in the equation which are the factor exposure values.
+$$\  R_{excess} = \beta_{mkt}X_1 + \beta_{size}X_2 + \beta_{momentum}X_3 + \beta_{value}X_4 + R_f + \epsilon $$
+
+
+### Code
+In the `calculation.py` file, the factor exposures of the strategy calculated using the `cal_lastest_perf_attrs` and `cal_performance_attribution` functions.
+```python
+def cal_performance_attribution(regr_data):
+  y_train = regr_data['excess_rets']
+  X_train = add_constant(regr_data.iloc[:, :-2])
+  dep_var = regr_data.iloc[:, :-2]
+  X_train = X_train.rename(columns={'const': 'Alpha'})
+  # Linear Regression
+  res = OLS(y_train, X_train).fit()
+  risk_expos = res.params
+
+Calculation:
+  def cal_lastest_perf_attrs(self):
+    ...
+    # Calculating the excess returns
+    data['excess_rets'] = data[self.stgy_rets.name] - data['RiskFree']
+    regr_data = data.loc[:, [
+        'Market', 'Size', 'Value', 'Momentum', 'RiskFree', 'excess_rets'
+    ]]
+    regr_data = regr_data[-data_length:]
+    self.risk_expos, self.ret_attrs, self.risk_attrs = cal_performance_attribution(
+        regr_data)
+```
+In the `plotting.py` file, this is where the horizontal bar chart will be plotted and formatted.
+```python
+ def plot_famafrench_expos(self):
+  ...
+```
+
+### Code Location
+**Calculation**  
+File: `calculation.py`  
+Function: `cal_lastest_perf_attrs`, `cal_performance_attribution`
+
+**Plotting**  
+File: `plotting.py`  
+Function: `plot_famafrench_expos`
+
+## Factor Exposures (Rolling) <a id="section17"></a>
+**Description**:  
+ 
+
+**Factsheet Location:**  Page 3, At the top left of the page
+
+### Formula
+
+### Code
+In the `calculation.py` file, the factor exposures of the strategy calculated using the `cal_lastest_perf_attrs` and `cal_performance_attribution` functions.
+```python
+
+```
+In the `plotting.py` file, this is where the horizontal bar chart will be plotted and formatted.
+```python
+
+```
+
+### Code Location
+**Calculation**  
+File: `calculation.py`  
+Function: `cal_lastest_perf_attrs`, `cal_performance_attribution`
+
+**Plotting**  
+File: `plotting.py`  
+Function: `plot_famafrench_expos`
