@@ -1386,7 +1386,7 @@ Function: `plot_famafrench_expos`
 ## Factor Exposures (Rolling) <a id="section17"></a>
 **Description**:  
 The rolling factor exposures are calculated using Fama-French Four-Factor Model, with one calendar year rolling window and one month frequency. Each time point in the graph represents the contribution of each factor to the strategy/product's returns.  
-![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/9c0095e5-d632-435e-909f-50b2a9621e8a)  
+![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/83276331-29a5-4bfd-b514-9de50062e1f3)  
 
 **Factsheet Location:**  Page 3, At the top right of the page
 
