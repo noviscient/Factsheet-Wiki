@@ -1329,13 +1329,14 @@ Means the portfolio includes assets that have a historical of strong performance
 Measures the impact of investing in undervalued assets relative to their book value
 4. Size:  
 This factor captures the performance difference between small-cap and large-cap stocks, with a focus on smaller companies  
-These factors are important to gain insights into the underlying drivers of risk and return in their portfolios.  
+These factors are important to gain insights into the underlying drivers of risk and return in their portfolios.
+![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/0b02f49d-bc0e-4e39-995a-e0af308efd5a)  
 
 **Factsheet Location:**  Page 3, At the top left of the page
 
 ### Formula
-1. Calculate the excess returns, $R_{excess}$:  
-$$ R_{excess} = R_{strat} - R_f $$  
+1. Calculate the excess returns, $R_{excess}$ :  
+$$\ R_{excess} = R_{strat} - R_f $$  
 $R_{strat}$: Strategy Returns  
 $R_f$: Risk-Free Rate  
 
@@ -1354,7 +1355,7 @@ def cal_performance_attribution(regr_data):
   # Linear Regression
   res = OLS(y_train, X_train).fit()
   risk_expos = res.params
-
+...
 Calculation:
   def cal_lastest_perf_attrs(self):
     ...
