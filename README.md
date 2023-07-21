@@ -1385,26 +1385,49 @@ Function: `plot_famafrench_expos`
 
 ## Factor Exposures (Rolling) <a id="section17"></a>
 **Description**:  
- 
+The rolling factor exposures are calculated using Fama-French Four-Factor Model, with one calendar year rolling window and one month frequency. Each time point in the graph represents the contribution of each factor to the strategy/product's returns.  
 
-**Factsheet Location:**  Page 3, At the top left of the page
+
+**Factsheet Location:**  Page 3, At the top right of the page
 
 ### Formula
+The formula is same as the [Factor Exposure (Rolling)](#section16) but the difference is that we will be calculating the rolling factor exposure for each month. For instance, for 2022-06-01, we will calculate the factor exposure using the data from 2021-06-01 to 2022-06-01 using the same formula in [Factor Exposure (Rolling)](#section16).
 
 ### Code
-In the `calculation.py` file, the factor exposures of the strategy calculated using the `cal_lastest_perf_attrs` and `cal_performance_attribution` functions.
+In the `calculation.py` file, the factor exposures of the strategy calculated using the `cal_hist_perf_attrs` and `cal_performance_attribution` functions.
 ```python
-
+def cal_performance_attribution(regr_data):
+  ...
+  # Linear Regression
+  res = OLS(y_train, X_train).fit()
+  risk_expos = res.params
+...
+Calculation:
+  def cal_hist_perf_attrs(self):
+    ...
+    dates = data.resample('M').last().index
+    dates = list(map(lambda x: (x + datetime.timedelta(days=1)),
+                      dates))[11:] # why from the 11th index onwards
+    for end_date in dates:
+        start_date = end_date.replace(year=end_date.year - 1)
+        regr_data = data[start_date:end_date]
+        self.hist_risk_expos[end_date], self.hist_ret_attrs[
+            end_date], self.hist_risk_attrs[
+                end_date] = cal_performance_attribution(regr_data)
+    self.hist_risk_expos = pd.DataFrame(
+        self.hist_risk_expos).T.sort_index()
+    ...
 ```
 In the `plotting.py` file, this is where the horizontal bar chart will be plotted and formatted.
 ```python
-
+def plot_famafrench_expos(self):
+  ...
 ```
 
 ### Code Location
 **Calculation**  
 File: `calculation.py`  
-Function: `cal_lastest_perf_attrs`, `cal_performance_attribution`
+Function: `cal_hist_perf_attrs`, `cal_performance_attribution`
 
 **Plotting**  
 File: `plotting.py`  
