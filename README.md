@@ -1386,12 +1386,12 @@ Function: `plot_famafrench_expos`
 ## Factor Exposures (Rolling) <a id="section17"></a>
 **Description**:  
 The rolling factor exposures are calculated using Fama-French Four-Factor Model, with one calendar year rolling window and one month frequency. Each time point in the graph represents the contribution of each factor to the strategy/product's returns.  
-
+![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/9c0095e5-d632-435e-909f-50b2a9621e8a)  
 
 **Factsheet Location:**  Page 3, At the top right of the page
 
 ### Formula
-The formula is same as the [Factor Exposure (Rolling)](#section16) but the difference is that we will be calculating the rolling factor exposure for each month. For instance, for 2022-06-01, we will calculate the factor exposure using the data from 2021-06-01 to 2022-06-01 using the same formula in [Factor Exposure (Rolling)](#section16).
+The formula is same as the [Factor Exposure (Current)](#section16) but the difference is that we will be calculating the rolling factor exposure for each month. For instance, for 2022-06-01, we will calculate the factor exposure using the strategy returns and Fama French Factor data from 2021-06-01 to 2022-06-01 then applying the formula found in [Factor Exposure (Current)](#section16).  
 
 ### Code
 In the `calculation.py` file, the factor exposures of the strategy calculated using the `cal_hist_perf_attrs` and `cal_performance_attribution` functions.
