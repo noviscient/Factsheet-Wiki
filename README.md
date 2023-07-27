@@ -50,6 +50,7 @@ Documentation for the Factsheet Calculations
 18. [Tail Correlation](#section15)
 19. [Factor Exposures (Current)](#section16)
 20. [Factor Exposures (Rolling)](#section17)
+21. [Factor Contributions to Return (Current)](#section18)
 
 
 ## Introduction <a id="section1"></a>
@@ -1320,7 +1321,7 @@ Function: `plot_tail_corr`
 ## Factor Exposures (Current) <a id="section16"></a>
 **Description**:  
 For this section and the following Factor Contribution sections, we will require two different datasets: Our strategy/product returns and the historical Fama French Factors.  
-The numbers in the graph indicate the contribution of each factor to the strategy/product's current overall return. 
+
 1. Market:  
 Risk associated with the general movement of the market
 2. Momentum:  
@@ -1329,7 +1330,9 @@ Means the portfolio includes assets that have a historical of strong performance
 Measures the impact of investing in undervalued assets relative to their book value
 4. Size:  
 This factor captures the performance difference between small-cap and large-cap stocks, with a focus on smaller companies  
-These factors are important to gain insights into the underlying drivers of risk and return in their portfolios.
+
+The percentages in the graph represent the strength of the relationship between the returns of the strategy/product and the factor.  
+
 ![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/0b02f49d-bc0e-4e39-995a-e0af308efd5a)  
 
 **Factsheet Location:**  Page 3, At the top left of the page
@@ -1340,7 +1343,7 @@ $$\ R_{excess} = R_{strat} - R_f $$
 $R_{strat}$: Strategy Returns  
 $R_f$: Risk-Free Rate  
 
-2. Find the factor exposure by conducting linear regression on the Excess Returns ($R_{excess}$) to find the $\ \beta $ values in the equation which are the factor exposure values.
+2. Calculate the factor exposure ($\ \beta $ values ) by doing linear regression of the Excess Returns ($R_{excess}$) on the Fama French Factor Returns(using this [data](http://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)).
 $$\  R_{excess} = \beta_{mkt}X_1 + \beta_{size}X_2 + \beta_{momentum}X_3 + \beta_{value}X_4 + R_f + \epsilon $$
 
 
@@ -1385,7 +1388,8 @@ Function: `plot_famafrench_expos`
 
 ## Factor Exposures (Rolling) <a id="section17"></a>
 **Description**:  
-The rolling factor exposures are calculated using Fama-French Four-Factor Model, with one calendar year rolling window and one month frequency. Each time point in the graph represents the contribution of each factor to the strategy/product's returns.  
+The rolling factor exposures are calculated using Fama-French Four-Factor Model, with one calendar year rolling window and one month frequency.  
+Each time point in the graph represent the strength of the relationship between the returns of the strategy/product and each factor.  
 ![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/83276331-29a5-4bfd-b514-9de50062e1f3)  
 
 **Factsheet Location:**  Page 3, At the top right of the page
@@ -1432,3 +1436,73 @@ Function: `cal_hist_perf_attrs`, `cal_performance_attribution`
 **Plotting**  
 File: `plotting.py`  
 Function: `plot_famafrench_expos`
+
+## Factor Contributions to Return (Current) <a id="section18"></a>
+**Description**:  
+The numbers in the graph indicate the contribution of each factor to the strategy/product's current overall return.
+
+**Factsheet Location:**  Page 3, Below Factor Exposures (Current)
+
+### Formula
+Following the calculations to find the $\ \beta\text{s} $ from [Factor Exposures (Current)](#section16),
+1. We assign the constant of the linear regression equation to be the strategy/product's Alpha  
+$$\  R_{excess} = \beta_{mkt}X_1 + \beta_{size}X_2 + \beta_{momentum}X_3 + \beta_{value}X_4 + R_f + \text{Alpha} $$  
+
+2. Find the mean return of each Fama French Factor, $\ \mu_{x} $
+$$\ \mu_{x} = \frac{R_1 + R_2 \ldots + R_T}{T}$$ 
+$\ \mu_{x} $: The mean of factor $x\text{'s}$ returns  
+$R_t$: Factor $x\text{'s}$ returns at time $t$  
+$T$: The length of factor $x\text{'s}$ return series  
+
+
+3. Find the Return Attribution for each Fama French Factor, $ A_x $
+$$\ A_x =  \mu_{x} * \beta_{x} * (\text{Total No. of Factors + 1}) $$
+$\ \beta_{x} $: The coefficient of factor $x$
+$\ \text{Total No. of Factors} $: The total number of factors considered for the return attribution. In our case it will be 5
+
+
+### Code
+In the `calculation.py` file, Factor Contribution to Return of the strategy is calculated using the `cal_lastest_perf_attrs` and `cal_performance_attribution` functions.
+```python
+def cal_performance_attribution(regr_data):
+  ### Linear Regression Portion ###
+  y_train = regr_data['excess_rets']
+  X_train = add_constant(regr_data.iloc[:, :-2])
+  dep_var = regr_data.iloc[:, :-2]
+  X_train = X_train.rename(columns={'const': 'Alpha'})
+  res = OLS(y_train, X_train).fit()
+  risk_expos = res.params
+  ### Linear Regression Portion ###
+
+  ### Steps 2 and 3 from Formula ###
+  ret_attrs = X_train.mean() * res.params
+  ret_attrs.loc['RiskFree'] = regr_data['RiskFree'].mean()
+  ret_attrs = ret_attrs * len(regr_data)
+  ### Steps 2 and 3 from Formula ###
+...
+Calculation:
+  def cal_lastest_perf_attrs(self):
+    ...
+    data['excess_rets'] = data[self.stgy_rets.name] - data['RiskFree']
+    regr_data = data.loc[:, [
+        'Market', 'Size', 'Value', 'Momentum', 'RiskFree', 'excess_rets'
+    ]]
+    regr_data = regr_data[-data_length:]
+    self.risk_expos, self.ret_attrs, self.risk_attrs = cal_performance_attribution(
+        regr_data)
+```
+In the `plotting.py` file, this is where the horizontal bar chart will be plotted and formatted.
+```python
+def plot_famafrench_ret_attrs(self):
+  ...
+```
+
+### Code Location
+**Calculation**  
+File: `calculation.py`  
+Function: `cal_lastest_perf_attrs`,`cal_performance_attribution`
+
+**Plotting**  
+File: `plotting.py`  
+Function: `plot_famafrench_ret_attrs`
+
