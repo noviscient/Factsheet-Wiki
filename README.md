@@ -1343,7 +1343,7 @@ $$\ R_{excess} = R_{strat} - R_f $$
 $R_{strat}$: Strategy Returns  
 $R_f$: Risk-Free Rate  
 
-2. Calculate the factor exposure ($\ \beta $ values ) by doing linear regression of the Excess Returns ($R_{excess}$) on the Fama French Factor Returns(using this [data](http://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)).
+2. Calculate the factor exposure, $\beta$ , by doing linear regression of the Excess Returns ($R_{excess}$) on the Fama French Factor Returns(using this [data](http://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html)).
 $$\  R_{excess} = \beta_{mkt}X_1 + \beta_{size}X_2 + \beta_{momentum}X_3 + \beta_{value}X_4 + R_f + \epsilon $$
 
 
@@ -1440,26 +1440,24 @@ Function: `plot_famafrench_expos`
 ## Factor Contributions to Return (Current) <a id="section18"></a>
 **Description**:  
 The numbers in the graph indicate the contribution of each factor to the strategy/product's current overall return.
-
+![image](https://github.com/noviscient/Factsheet-Wiki/assets/114644478/9d36f20d-c5f1-485d-b8fa-912e72e9727e)  
 **Factsheet Location:**  Page 3, Below Factor Exposures (Current)
 
 ### Formula
-Following the calculations to find the $\ \beta\text{s} $ from [Factor Exposures (Current)](#section16),
+Following the calculations to find all Fama French Factor Returns, $\beta$ , from [Factor Exposures (Current)](#section16),
 1. We assign the constant of the linear regression equation to be the strategy/product's Alpha  
 $$\  R_{excess} = \beta_{mkt}X_1 + \beta_{size}X_2 + \beta_{momentum}X_3 + \beta_{value}X_4 + R_f + \text{Alpha} $$  
 
-2. Find the mean return of each Fama French Factor, $\ \mu_{x} $
-$$\ \mu_{x} = \frac{R_1 + R_2 \ldots + R_T}{T}$$ 
+2. Find the mean return of each Fama French Factor, $\ \mu_{x} $  
+$$\ \mu_{x} = \frac{R_1 + R_2 \ldots + R_T}{T}$$  
 $\ \mu_{x} $: The mean of factor $x\text{'s}$ returns  
 $R_t$: Factor $x\text{'s}$ returns at time $t$  
 $T$: The length of factor $x\text{'s}$ return series  
 
-
-3. Find the Return Attribution for each Fama French Factor, $ A_x $
-$$\ A_x =  \mu_{x} * \beta_{x} * (\text{Total No. of Factors + 1}) $$
-$\ \beta_{x} $: The coefficient of factor $x$
+3. Find the Return Attribution for each Fama French Factor, $\ A_x $  
+$$\ A_x =  \mu_{x} * \beta_{x} * (\text{Total No. of Factors + 1}) $$  
+$\beta_x$: The coefficient of factor $x$  
 $\ \text{Total No. of Factors} $: The total number of factors considered for the return attribution. In our case it will be 5
-
 
 ### Code
 In the `calculation.py` file, Factor Contribution to Return of the strategy is calculated using the `cal_lastest_perf_attrs` and `cal_performance_attribution` functions.
