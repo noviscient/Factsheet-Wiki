@@ -51,6 +51,7 @@ Documentation for the Factsheet Calculations
 19. [Factor Exposures (Current)](#section16)
 20. [Factor Exposures (Rolling)](#section17)
 21. [Factor Contributions to Return (Current)](#section18)
+22. [Factor Contributions to Return (Rolling)](#section19)
 
 
 ## Introduction <a id="section1"></a>
@@ -1395,7 +1396,8 @@ Each time point in the graph represent the strength of the relationship between 
 **Factsheet Location:**  Page 3, At the top right of the page
 
 ### Formula
-The formula is same as the [Factor Exposure (Current)](#section16) but the difference is that we will be calculating the rolling factor exposure for each month. For instance, for 2022-06-01, we will calculate the factor exposure using the strategy returns and Fama French Factor data from 2021-06-01 to 2022-06-01 then applying the formula found in [Factor Exposure (Current)](#section16).  
+The formula is same as the [Factor Exposure (Current)](#section16) but the difference is that we will be calculating the rolling factor exposure for each month based on the historical Fama French Factor Returns data.  
+For instance, for 2022-06-01, we will calculate the factor exposure using the strategy returns and Fama French Factor data from 2021-06-01 to 2022-06-01 then applying the formula found in [Factor Exposure (Current)](#section16).  
 
 ### Code
 In the `calculation.py` file, the factor exposures of the strategy calculated using the `cal_hist_perf_attrs` and `cal_performance_attribution` functions.
@@ -1504,3 +1506,63 @@ Function: `cal_lastest_perf_attrs`,`cal_performance_attribution`
 File: `plotting.py`  
 Function: `plot_famafrench_ret_attrs`
 
+## Factor Contributions to Return (Rolling) <a id="section19"></a>
+**Description**:  
+The rolling factor contribution to return are calculated using Fama-French Four-Factor Model, with one calendar year rolling window and one month frequency.  
+The graph illustrates the percentage contribution of each factor to the overall return at different time points.  
+
+**Factsheet Location:**  Page 3, Below Factor Exposures (Current)
+
+### Formula
+The formula to find the factor contribution to return is the same as the [Factor Contributions to Return (Current)](#section18) Formula however in the Rolling case we will be calculating the rolling factor contribution to return for each month based on the historical Fama French Factor Returns data.  
+For instance, for 2022-06-01, we will calculate the factor contribution to returns using the strategy returns and Fama French Factor data between 2021-06-01 and 2022-06-01 then applying the formula found in the [Factor Contributions to Return (Current)](#section18) section. 
+
+### Code
+In the `calculation.py` file, the factor exposures of the strategy calculated using the `cal_hist_perf_attrs` and `cal_performance_attribution` functions.
+```python
+def cal_performance_attribution(regr_data):
+  ### Linear Regression Portion ###
+  y_train = regr_data['excess_rets']
+  X_train = add_constant(regr_data.iloc[:, :-2])
+  dep_var = regr_data.iloc[:, :-2]
+  X_train = X_train.rename(columns={'const': 'Alpha'})
+  res = OLS(y_train, X_train).fit()
+  risk_expos = res.params
+  ### Linear Regression Portion ###
+
+  ### Steps 2 and 3 from Formula ###
+  ret_attrs = X_train.mean() * res.params
+  ret_attrs.loc['RiskFree'] = regr_data['RiskFree'].mean()
+  ret_attrs = ret_attrs * len(regr_data)
+  ### Steps 2 and 3 from Formula ###
+...
+Calculation:
+  def cal_hist_perf_attrs(self):
+    ...
+    dates = data.resample('M').last().index
+    dates = list(map(lambda x: (x + datetime.timedelta(days=1)),
+                      dates))[11:] # why from the 11th index onwards
+    for end_date in dates:
+        start_date = end_date.replace(year=end_date.year - 1)
+        regr_data = data[start_date:end_date]
+        self.hist_risk_expos[end_date], self.hist_ret_attrs[
+            end_date], self.hist_risk_attrs[
+                end_date] = cal_performance_attribution(regr_data)
+    ...
+    self.hist_ret_attrs = pd.DataFrame(self.hist_ret_attrs).T.sort_index()
+    ...
+```
+In the `plotting.py` file, this is where the horizontal bar chart will be plotted and formatted.
+```python
+def plot_famafrench_ret_attrs(self):
+  ...
+```
+
+### Code Location
+**Calculation**  
+File: `calculation.py`  
+Function: `cal_hist_perf_attrs`,`cal_performance_attribution`
+
+**Plotting**  
+File: `plotting.py`  
+Function: `plot_famafrench_ret_attrs`
